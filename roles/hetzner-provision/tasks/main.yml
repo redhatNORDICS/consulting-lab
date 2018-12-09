@@ -1,0 +1,25 @@
+---
+# tasks file for hetzner-provision
+- name: copy configuration file
+  template:
+    src: hetzner.config
+    dest: /root/hetzner.config
+
+- command: file /root/hetzner.config 
+  register: whoami
+  
+- debug:
+    msg: "{{ whoami }}"
+
+- name: run the setup (long running task. approx 5min)
+  command: /root/.oldroot/nfs/install/installimage -c /root/hetzner.config -a 
+  register: installimage
+
+- name: reboot and wait until connection is done 
+  import_role:
+    name: reboot
+  tags: reboot
+  
+- name: We are done rebooting
+  command: echo "We are done rebooting"
+

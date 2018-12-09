@@ -1,0 +1,17 @@
+---
+# defaults file for reboot
+
+# Ansible reboot message
+reboot_message: "Ansible triggered reboot"
+
+# How long the maximum wait should be before giving up reconnecting (in seconds)
+reboot_timeout: 600
+
+# How long to wait between every poll
+reboot_sleep: 1
+
+# How long before we start polling
+reboot_delay: 20
+
+# How long before a poll should give up
+reboot_connection_timeout: 5

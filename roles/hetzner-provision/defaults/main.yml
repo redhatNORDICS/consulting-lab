@@ -1,0 +1,5 @@
+---
+#/ defaults file for hetzner-provision
+
+domain: "rh.consultant.lab.org"
+hostname: labhost.{{ domain }}
