@@ -79,6 +79,8 @@ knockd_port_sequence: "tcp:9323,udp:8756,tcp:4325"
 network_subnets:
 - name: ocp
   range: 172.54.0.0/24
+- name: infra
+  range: 172.50.0.0/24
   
 network_dns: 8.8.8.8
 network_
