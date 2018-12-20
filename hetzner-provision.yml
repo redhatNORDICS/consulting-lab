@@ -1,0 +1,6 @@
+- hosts: labhost
+  user: root
+  gather_facts: no
+  tasks:
+  - import_role: 
+      name: hetzner-provision

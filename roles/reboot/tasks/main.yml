@@ -1,0 +1,30 @@
+---
+# tasks file for reboot
+- name: Reboot system
+  shell: "sleep 2 && shutdown -r now '{{ reboot_message }}'"
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: "Wait for the {{ ansible_host }} to finish rebooting"
+  wait_for_connection: 
+    delay: "{{ reboot_delay }}"
+    timeout: "{{ reboot_timeout }}"
+    sleep: "{{ reboot_sleep }}"
+    connect_timeout: "{{ reboot_connection_timeout }}"
+  when: ansible_poller is not defined
+  tags: wait_reboot
+
+
+- name: "Wait for the {{ ansible_host }} to finish rebooting"
+  wait_for:
+    host: "{{ ansible_host }}"
+    search_regex: OpenSSH
+    port: 22
+    sleep: "{{ reboot_sleep }}"
+    timeout: "{{ reboot_timeout }}"
+    delay: "{{ reboot_delay }}"
+    connect_timeout: "{{ reboot_connection_timeout }}"
+  delegate_to: "{{ ansible_poller }}"
+  when: ansible_poller is defined
+  tags: wait_reboot
