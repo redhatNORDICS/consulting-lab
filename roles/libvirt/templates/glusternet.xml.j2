@@ -1,0 +1,12 @@
+<network>
+  <name>glusternet</name>
+  <forward mode='nat'/>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:e5:36:03'/>
+  <ip address='192.168.191.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.191.2' end='192.168.191.254'/>
+    </dhcp>
+  </ip>
+</network>
+

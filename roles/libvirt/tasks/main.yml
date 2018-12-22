@@ -1,0 +1,87 @@
+# tasks file for labhost
+- name: install packages
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - "@virtualization-platform"
+    - "@^virtualization-host-environment"
+    - iptables-services
+    - virt-install
+    - libguestfs-tools.noarch
+    - libguestfs-xfs
+    - git
+    - python-lxml
+    - epel-release
+
+- name: disable firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+
+- name: enable services
+  service:
+    enabled: true
+    state: started
+    name: "{{ item }}"
+  with_items:
+    - libvirtd
+    - iptables
+
+- include_tasks: networks.yml
+
+- name: enable networks
+  virt_net:
+    name: "{{ item }}"
+    state: active
+  with_items:
+    - default
+#    - glusternet
+#    - internal
+
+
+- name: clone virt-install-wrapper
+  git:
+    repo: https://github.com/opuk/virt-install-wrapper.git
+    dest: /root/virt-install-wrapper
+  ignore_errors: true
+
+- name: allow ssh
+  iptables:
+    action: insert
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    ctstate: NEW
+    comment: allow incoming SSH
+    jump: ACCEPT
+  register: iptables_ssh
+
+- name: allow lo
+  iptables:
+    action: insert
+    chain: INPUT
+    in_interface: lo
+    jump: ACCEPT
+  register: iptables_lo
+
+- name: allow response traffic
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    comment: allow response traffic
+    jump: ACCEPT
+  register: iptables_response
+
+- name: drop stuff
+  iptables:
+    chain: INPUT
+    reject_with: icmp-port-unreachable
+    ip_version: ipv4
+  register: iptables_reject
+
+- name: save iptables rules
+  shell: iptables-save > /etc/sysconfig/iptables
+  when: iptables_ssh.changed or iptables_response.changed or iptables_reject.changed or iptables_lo.changed
+                                                                                                                  

@@ -1,0 +1,17 @@
+<network>
+  <name>internal</name>
+  <uuid>c9d7682d-69f9-4ea9-915e-a187d1b419fc</uuid>
+  <forward dev='tun0' mode='route'>
+    <interface dev='tun0'/>
+  </forward>
+  <bridge name='virbr2' stp='on' delay='0'/>
+  <mac address='52:54:00:51:8a:6a'/>
+  <domain name='lab.moogle.cloud'/>
+  <ip address='172.16.3.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='172.16.3.128' end='172.16.3.254'/>
+      <bootp file='/pxelinux.0' server='{{ lookup('dig', '{{ repomgmt_host }}.') }}'/>
+    </dhcp>
+  </ip>
+</network>
+
