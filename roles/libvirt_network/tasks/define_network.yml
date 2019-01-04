@@ -5,17 +5,17 @@
 # Define the network using the jinja template
 # open up any ports that are needed by looping the port list
 
-- name: "Defining network {{ network.network_name }}"
+- name: "Defining network {{ network.name }}"
   virt_net:
     command: define
-    name: "{{ network.network_name }}"
-    xml: '{{ lookup("template", "{{ item.network_type }}.xml.j2") }}'
+    name: "{{ network.name }}"
+    xml: '{{ lookup("template", "{{ network.type }}.xml.j2") }}'
 
-- name: "Enable and Autostart virtual network {{ network.network_name }}"
+- name: "Enable and Autostart virtual network {{ network.name }}"
   virt_net:
     state: active
     autostart: yes
-    name: "{{ item.network_name }}"
+    name: "{{ network.name }}"
 
 # WIP
 # loop over the network['fw'] list and run the firewall role.

@@ -1,8 +1,8 @@
 - name: define virtual networks
   virt_net:
     command: define
-    name: "{{ item.network_name }}"
-    xml: '{{ lookup("template", "{{ item.network_type }}.xml.j2") }}'
+    name: "{{ item.name }}"
+    xml: '{{ lookup("template", "{{ item.type }}.xml.j2") }}'
   with_items:
     - "{{ libvirt_networks }}"
 

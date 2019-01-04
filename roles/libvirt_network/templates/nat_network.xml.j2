@@ -5,6 +5,6 @@
       <port start='1024' end='65535'/>
     </nat>
   </forward>
-  <ip address="{{ item.network_interface_address }}" netmask="255.255.255.0"/>
+  <ip address="{{ item.network_interface_address }}" netmask="{{ netmask | default('255.255.255.0') }}"/>
 </network>
 

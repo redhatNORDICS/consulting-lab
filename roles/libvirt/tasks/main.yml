@@ -29,14 +29,14 @@
     - libvirtd
     - iptables
 
-- include_tasks: networks.yml
-
-- name: enable networks
-  virt_net:
-    name: "{{ item }}"
-    state: active
-  with_items:
-    - default
+#- include_tasks: networks.yml
+#
+#- name: enable networks
+#  virt_net:
+#    name: "{{ item }}"
+#    state: active
+#  with_items:
+#    - default
 #    - glusternet
 #    - internal
 
