@@ -7,6 +7,12 @@ persist-key
 user nobody
 remote {{ inventory_hostname }}
 secret static.key
+{% if libvirt_networks is defined %}
 {% for network in libvirt_networks %}
 route {{ network.address }} {{ network.netmask }} {{ openvpn_network_gw }}
 {% endfor %}
+{% else %}
+# No networks defined in libvirt_networks:
+# so no routes added
+{% endif %}
+{% endif %}
