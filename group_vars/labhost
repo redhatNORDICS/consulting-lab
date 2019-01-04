@@ -2,14 +2,18 @@
 libvirt_networks:
 - name: mgmt
   type: nat_network_dhcp
+  address: 10.0.0.0
   interface_address: 10.0.0.1
   netmask: 255.255.255.0
+  prefix: 24
   dhcp_range_start: 10.0.0.100
   dhcp_range_stop: 10.0.0.254
 
 - name: ocp
   type: nat_network_dhcp
+  address: 192.168.132.0
   interface_address: 192.168.132.1
   netmask: 255.255.255.0
+  prefix: 24
   dhcp_range_start: 192.168.132.2
   dhcp_range_stop: 192.168.132.254
