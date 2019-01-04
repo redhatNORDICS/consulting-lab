@@ -57,6 +57,13 @@ libvirt_networks:
 
 Two networks (different types):
 libvirt_networks:
+- name: default
+  type: nat_network_dhcp
+  interface_address: 192.168.122.1
+  dhcp_range_start: 192.168.122.2
+  dhcp_range_stop: 192.168.122.254
+  netmask: 255.255.255.0
+
 - name: mgmt 
   type: nat_network
   interface_address: 192.168.122.1
