@@ -1,7 +1,8 @@
 libvirt_network
 ===============
 
-Tested Ansible version:
+Tested Ansible version: 
+- 2.7.2
 
 Requires: libxml
 
@@ -10,11 +11,11 @@ See the libvirt role for configuring libvirt/KVM on the labhost, which should be
 
 - Configures the virtual networks
   You can choose between different network "types". 
-- Integrates with the firewall role.
+- Integrates with the firewall role. (wip)
 
 ## Network
 
-As desribed in <insert link here>, libvirt creates the networks and the bridges that your VM's connect to.
+As desribed in <insert link here>, libvirt_network creates the networks and the bridges that your VM's connect to.
 The labhost/KVM host acts as the gateway to all these networks.
 You can choose between X different network modes.
 
