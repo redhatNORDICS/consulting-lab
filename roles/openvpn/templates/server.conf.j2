@@ -1,0 +1,15 @@
+#{{ ansible_managed }}
+dev tun
+ifconfig {{ openvpn_network_gw }} {{ openvpn_network_client }}
+cipher AES-256-CBC
+keepalive 10 60
+ping-timer-rem
+persist-tun
+persist-key
+cipher AES-256-CBC
+# here we add each libvirt network we set up so the client configures the routes to go through the tun interface
+{% for network in libvirt_networks %}
+route {{ network.address }} {{ network.netmask }} {{ openvpn_network_gw }}
+{% endfor %}
+secret static.key
+

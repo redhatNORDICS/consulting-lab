@@ -1,0 +1,2 @@
+openvpn_base_dir: /etc/openvpn
+openvpn_key_dir: /etc/openvpn/keys

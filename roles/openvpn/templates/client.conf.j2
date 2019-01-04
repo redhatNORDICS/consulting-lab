@@ -1,0 +1,12 @@
+dev tun
+auth-nocache
+ifconfig {{ openvpn_network_client }} {{ openvpn_network_gw }}
+cipher AES-256-CBC
+persist-tun
+persist-key
+user nobody
+remote {{ inventory_hostname }}
+secret static.key
+{% for network in libvirt_networks %}
+route {{ network.address }} {{ network.netmask }} {{ openvpn_network_gw }}
+{% endfor %}
