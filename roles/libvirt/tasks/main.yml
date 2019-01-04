@@ -29,18 +29,6 @@
     - libvirtd
     - iptables
 
-#- include_tasks: networks.yml
-#
-#- name: enable networks
-#  virt_net:
-#    name: "{{ item }}"
-#    state: active
-#  with_items:
-#    - default
-#    - glusternet
-#    - internal
-
-
 - name: clone virt-install-wrapper
   git:
     repo: https://github.com/opuk/virt-install-wrapper.git
