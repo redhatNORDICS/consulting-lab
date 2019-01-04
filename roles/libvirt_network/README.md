@@ -24,19 +24,21 @@ Especially interesting is the option to specify a PXE boot server. This is very 
 
 ## Firewall integraiton
 
+WIP
+
 ## Network definition Variables 
 
 `libvirt_networks: ` This is the list that the role loops over to create the networks. Each entry is a dictionary containing mandatory and optional variables.
 The vars are as follows:
 
-`network_name:` The name of the network. You will see this in your virt console. We also use this to name the interface(?) 
-`network_type:` Choose the network type. Decides what template file to use. Right now you can choose between:
+`name:` The name of the network. You will see this in your virt console. We also use this to name the interface(?) 
+`type:` Choose the network type. Decides what template file to use. Right now you can choose between:
 - `nat_network_dhcp` NAT network with DHCP.
 - `nat_network` NAT network without DHCP
 - `isolated_network` Isolated network. You have to setup a proxy to reach external resources.
 
-`network_interface_address:` The IP of the gateway. Used to determine the subnet range.
-`network_netmask:` (optional) Defaults to 255.255.255.0. Have to specify decimal mask, prefix not supported.
+`interface_address:` The IP of the gateway. Used to determine the subnet range.
+`netmask:` (optional) Defaults to 255.255.255.0. Have to specify decimal mask, prefix not supported.
 
 
 
@@ -45,11 +47,12 @@ The vars are as follows:
 One single network:
 ```
 libvirt_networks:
-- network_name: default
-  network_type: nat_network_dhcp
-  network_interface_address: 192.168.122.1
-  network_dhcp_range_start: 192.168.122.2
-  network_dhcp_range_stop: 192.168.122.254
+- name: default
+  type: nat_network_dhcp
+  interface_address: 192.168.122.1
+  dhcp_range_start: 192.168.122.2
+  dhcp_range_stop: 192.168.122.254
+  netmask: 255.255.255.0
 ```
 
 Two networks (different types):
