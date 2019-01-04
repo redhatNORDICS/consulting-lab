@@ -3,14 +3,17 @@ OpenVPN
 
 Role to configure OpenVPN on the labhost
 
-Current limitations
+Current limitations:
+
 **Important that this is run before the libvirt and libvirt_network roles so that the iptables rules are added in the right order!**
+
 Hopefully we can make this a bit more robust in the future.
 
-Single client only. Right now we use one secret and one client only.
-To allow more users we have to set up a proper key infra to handout multiple signed keys.
-There are many roles out that the that does the job.
-ex. https://github.com/kyl191/ansible-role-openvpn
+*Single client only.*  
+Right now we use one secret and one client only.  
+To allow more users we have to set up a proper key infra to handout multiple signed keys.  
+There are many roles out that the that does the job.  
+eg. https://github.com/kyl191/ansible-role-openvpn
 
 How it works
 ------------
@@ -27,7 +30,7 @@ Client config and the secret will be copied over to your ansible host and be pla
 
 If you are using NetworkManager, you can simply import this vpn config.
 
-**You may want to enable the `use this connection only for resources on its network` option to only route traffic meant for the labenvironment through the VPN.**
+**You may want to enable the `Use this connection only for resources on its network` option to only route traffic meant for the labenvironment through the VPN.**
 
 Requirements
 ------------
