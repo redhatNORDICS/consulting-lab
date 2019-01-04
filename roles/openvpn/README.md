@@ -3,10 +3,8 @@ OpenVPN
 
 Role to configure OpenVPN on the labhost
 
-Current limitations:
-
-**Important that this is run before the libvirt and libvirt_network roles so that the iptables rules are added in the right order!**
-
+Current limitations:  
+**Important that this is run before the libvirt and libvirt_network roles so that the iptables rules are added in the right order!**  
 Hopefully we can make this a bit more robust in the future.
 
 *Single client only.*  
@@ -19,17 +17,16 @@ How it works
 ------------
 
 The role will configure a OpenVPN server, the client configuration and create a secret that is used when connecting.
-Forwarding will be configured so that the VPN network (`openvpn_network:`) can reach all networks.
-The server and client config will pick up the `libvirt_networks` and add them as routes in the configs.
-The virtual networks however must however configure the FORWARD rules when they are created, but this `libvirt_network` does this for you.
-So in this way the openvpn role and the libvirt_network role depend on each otheres variables to be specified. 
-And due to the FORWARD rules, it's important that the openvpn role is run before the libvirt_networks.
+Forwarding will be configured so that the VPN network (`openvpn_network:`) can reach all networks.  
+The server and client config will pick up the `libvirt_networks` and add them as routes in the configs.  
+The virtual networks however must however configure the FORWARD rules when they are created, but this `libvirt_network` does this for you.  
+So in this way the openvpn role and the libvirt_network role depend on each otheres variables to be specified.   
+And due to the FORWARD rules, it's important that the openvpn role is run before the libvirt_networks.  
 
 Client config and the secret will be copied over to your ansible host and be placed in:
  `~/openvpnconfig/<inventory hostname>/`
 
-If you are using NetworkManager, you can simply import this vpn config.
-
+If you are using NetworkManager, you can simply import this vpn config.  
 **You may want to enable the `Use this connection only for resources on its network` option to only route traffic meant for the labenvironment through the VPN.**
 
 Requirements
@@ -40,10 +37,10 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 Role Variables
 --------------
 
-Overridable defaults:
-`openvpn_network`: The network that you want OpenVPN to allocate. Default is set to 10.99.99.0
-`openvpn_network_gw`: The address OpenVPN will use for the server and the next-hop for the client. Default is set to 10.99.99.1
-`openvpn_network_client`: The address OpenVPN client will use. Default is set to 10.99.99.2
+Overridable defaults:  
+`openvpn_network`: The network that you want OpenVPN to allocate. Default is set to 10.99.99.0  
+`openvpn_network_gw`: The address OpenVPN will use for the server and the next-hop for the client. Default is set to 10.99.99.1  
+`openvpn_network_client`: The address OpenVPN client will use. Default is set to 10.99.99.2  
 
 Dependencies
 ------------
