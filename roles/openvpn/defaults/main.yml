@@ -1,0 +1,3 @@
+openvpn_network: 10.99.99.0
+openvpn_network_gw: 10.99.99.1
+openvpn_network_client: 10.99.99.2

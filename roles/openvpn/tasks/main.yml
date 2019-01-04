@@ -1,0 +1,88 @@
+---
+# tasks file for static_openvpn
+
+- name: install openvpn
+  yum:
+    name: openvpn
+    state: installed
+
+- name: check for static key
+  stat:
+    path: /etc/openvpn/static.key
+  register: static_key
+
+- name: generate static openvpn key
+  command: openvpn --genkey --secret /etc/openvpn/static.key
+  when: static_key.stat.exists == False
+
+- name: create configdir
+  file:
+    dest: ~/openvpnconfigs/{{ inventory_hostname }}
+    recurse: true
+    state: directory
+  delegate_to: localhost
+
+- name: configure openvpn server
+  template:
+    dest: /etc/openvpn/server.conf
+    src: server.conf.j2
+  register: server_conf
+
+- name: configure client
+  template:
+    dest: ~/openvpnconfigs/{{ inventory_hostname }}/client.conf
+    src: client.conf.j2
+  delegate_to: localhost
+
+- name: fetch static key
+  fetch:
+    src: /etc/openvpn/static.key
+    flat: true
+    dest: ~/openvpnconfigs/{{inventory_hostname}}/static.key
+
+- name: open openvpn port
+  iptables:
+    action: insert
+    chain: INPUT
+    protocol: udp
+    destination_port: 1194
+    ctstate: NEW
+    comment: openvpn
+    jump: ACCEPT
+  register: iptables
+
+- name: allow forward from VPN tun0 net to any network
+  iptables:
+    action: insert
+    chain: FORWARD
+    in_interface: tun0
+    jump: ACCEPT
+    comment: allow forward from openvpn
+  register: iptables2
+
+- name: allow INPUT to tun0
+  iptables:
+    action: insert
+    chain: INPUT
+    in_interface: tun0
+    jump: ACCEPT
+    comment: allow input from openvpn
+  register: iptables3
+
+
+- name: save iptables rules
+  shell: iptables-save > /etc/sysconfig/iptables
+  when: iptables.changed or iptables2.changed or iptables3.changed
+
+- name: restart openvpn server
+  service:
+    name: openvpn@server
+    enabled: true
+    state: restarted
+  when: server_conf.changed
+
+- name: enable openvpn server
+  service:
+    name: openvpn@server
+    enabled: true
+    state: started
