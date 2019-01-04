@@ -6,8 +6,8 @@ Tested Ansible version:
 
 Requires: libxml
 
-Role to configure and manage the libvirt netowrks.
-See the libvirt role for configuring libvirt/KVM on the labhost, which should be run prior to using this role.
+Role to configure and manage the libvirt networks.
+See the libvirt role for configuring libvirt/KVM on the labhost, which should be run _prior_ to using this role.
 
 - Configures the virtual networks
   You can choose between different network "types". 
@@ -42,10 +42,7 @@ The vars are as follows:
 `netmask:` (optional) Defaults to 255.255.255.0. Have to specify decimal mask, prefix not supported.
 
 
-
-
-
-One single network:
+### One single network:
 ```
 libvirt_networks:
 - name: default
@@ -56,7 +53,7 @@ libvirt_networks:
   netmask: 255.255.255.0
 ```
 
-Two networks (different types):
+### Two networks (different types):
 libvirt_networks:
 - name: default
   type: nat_network_dhcp
@@ -72,4 +69,16 @@ libvirt_networks:
   dhcp_range_stop: 192.168.122.254
 ```
 
+## Example
+
+Add the network definitions in your playbook vars according to above, for example in <ansible playbook dir>/group_vars/all.
+
+Include the role in your setup playbook:
+```
+- hosts: labhost
+  user: root
+  roles:
+  - libvirt
+  - libvirt_network
+```
 
