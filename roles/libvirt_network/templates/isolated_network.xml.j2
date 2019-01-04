@@ -1,5 +1,5 @@
 <network>
   <name>{{ network.name }}</name>
-  <ip address="{{ network.interface_address }}" netmask="255.255.255.0"/>
+  <ip address="{{ network.interface_address }}" netmask='{{ network.netmask  | default('255.255.255.0') }}'>
 </network>
 
