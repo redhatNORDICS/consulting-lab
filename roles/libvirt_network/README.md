@@ -57,11 +57,11 @@ libvirt_networks:
 
 Two networks (different types):
 libvirt_networks:
-- network_name: mgmt 
-  network_type: nat_network
-  network_interface_address: 192.168.122.1
-  network_dhcp_range_start: 192.168.122.2
-  network_dhcp_range_stop: 192.168.122.254
+- name: mgmt 
+  type: nat_network
+  interface_address: 192.168.122.1
+  dhcp_range_start: 192.168.122.2
+  dhcp_range_stop: 192.168.122.254
 ```
 
 
