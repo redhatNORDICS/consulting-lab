@@ -1,0 +1,9 @@
+---
+# Run the define_network play for each libvirt_network entry.
+# Includes different play depending on the Type as we have to do different firewall openings
+
+- name: define networks
+  include_tasks: define_network.yml
+  loop_control:
+    loop_var: network
+  loop: "{{ libvirt_networks }}"

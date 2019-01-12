@@ -1,0 +1,36 @@
+---
+# task list is run as a loop
+# expects a network dictionary which it gets from the main.yml
+# 
+# Define the network using the jinja template
+# open up any ports that are needed by looping the port list
+
+- name: "Defining network {{ network.name }}"
+  virt_net:
+    command: define
+    name: "{{ network.name }}"
+    xml: '{{ lookup("template", "{{ network.type }}.xml.j2") }}'
+
+- name: "Enable and Autostart virtual network {{ network.name }}"
+  virt_net:
+    state: active
+    autostart: yes
+    name: "{{ network.name }}"
+
+- name: allow forward to vpn network
+  iptables:
+    action: insert
+    chain: FORWARD
+    source: "{{ network.address }}/{{ network.prefix }}"
+    destination: 192.168.201.0/24
+    jump: ACCEPT
+  register: allow_vpn
+
+# WIP
+# loop over the network['fw'] list and run the firewall role.
+# each item should contain a firewall config according to the firewall role
+#- name: Configure firewall for network
+#  include_role:
+#    name: fw
+#  loop: "{{ network.ports }}" 
+#  loop_var: port
