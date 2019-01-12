@@ -1,0 +1,36 @@
+---
+# run as a loop in main.yml
+- name: Create user
+  user:
+    name: "{{ user.name }}"
+
+- block:
+  - name: touch /etc/sudoers.d/users
+    file:
+      path: /etc/sudoers.d/users
+      state: touch
+
+  - name: Add user to sudoers with NOPASSWD
+    lineinfile:
+      path: /etc/sudoers.d/users
+      state: present
+      line: '{{ user.name }} ALL=(ALL) NOPASSWD: ALL'
+      validate: '/usr/sbin/visudo -cf %s'
+    when: user.nopasswd | default(true)
+
+  - name: Add user to sudoers using password
+    lineinfile:
+      path: /etc/sudoers.d/users
+      state: present
+      line: '{{ user.name }} ALL=(ALL) NOPASSWD: ALL'
+      validate: '/usr/sbin/visudo -cf %s'
+    when: not user.nopasswd | default(true)
+  when: user.sudo | default(true)
+
+- name: add public key to authorized_keys
+  authorized_key:
+    user: "{{ user.name }}"
+    key: "{{ user.public_key }}"
+    state: present
+  when: user.public_key is defined 
+
