@@ -1,0 +1,15 @@
+---
+# 2nd playbook
+# Run this after 1st
+# Connect to the VPN so that we canreach labhost-internal
+# User is set to what you configured in the previous run
+
+# This will configure libvirt and the networks
+# It will set up a dedicated mgmt network with fw openings between the two
+
+- hosts: labhost-internal
+  user: moss
+  roles:
+  - libvirt
+  - libvirt_network
+  - hardening

@@ -1,0 +1,14 @@
+---
+# 1st playbook
+# Will configure the basics and the VPN + ssh
+# It will 
+- hosts: labhost
+  user: root
+  roles:
+  - users
+  - base
+  - motd
+  - openvpn
+  - sshd
+
+
