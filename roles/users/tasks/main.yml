@@ -1,0 +1,9 @@
+---
+# tasks file for users
+
+- name: Create users
+  include_tasks: create_user.yml
+  loop: "{{ users }}"
+  loop_control:
+    loop_var: user
+

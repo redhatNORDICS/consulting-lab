@@ -1,0 +1,4 @@
+---
+# defaults file for users
+#
+# No defaults in here. Rather you find them in the when: statements in the create_user.yml 

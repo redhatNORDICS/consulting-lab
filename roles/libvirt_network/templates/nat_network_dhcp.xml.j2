@@ -1,0 +1,11 @@
+<network>
+  <name>{{ network.name }}</name>
+  <bridge name="virbr-{{ network.name }}" />
+  <forward mode='nat'/>
+  <ip address='{{ network.interface_address }}' netmask='{{ network.netmask  | default('255.255.255.0') }}'>
+    <dhcp>
+      <range start='{{ network.dhcp_range_start }}' end='{{ network.dhcp_range_stop }}'/>
+    </dhcp>
+  </ip>
+</network>
+

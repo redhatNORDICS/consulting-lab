@@ -1,0 +1,59 @@
+---
+# tasks file for knockd
+- name: check if installed
+  command: rpm -q knock-server 
+  register: installed
+  ignore_errors: true
+
+- block:
+  - name: download SRPM
+    get_url:
+      url: http://www.invoca.ch/pub/packages/knock/RPMS/ils-7/SRPMS/knock-0.7-1.el7.src.rpm
+      dest: /tmp/knock-0.7-1.el7.src.rpm
+
+  - name: debug
+    debug: 
+      msg: "{{ ansible_distribution }}"
+
+  - name: RHEL7 enable optional repo
+    command: subscription-manager repos --enable rhel-7-server-optional-rpms 
+    when: ansible_distribution == 'RedHat'
+      
+  - name: install deps
+    yum:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - libpcap-devel
+      - gcc
+      - rpm-build
+
+  - name: build from SRPM
+    command: rpmbuild --rebuild /tmp/knock-0.7-1.el7.src.rpm
+    register: rpmbuild
+
+  - name: install knockd server (CentOS)
+    yum:
+      name: /root/rpmbuild/RPMS/x86_64/knock-server-0.7-1.el7.x86_64.rpm
+      state: present
+    when: ansible_distribution == 'CentOS'
+
+  - name: install knockd server (RedHat)
+    yum:
+      name: /root/rpmbuild/RPMS/x86_64/knock-server-0.7-1.el7.x86_64.rpm
+      state: present
+    when: ansible_distribution == 'RedHat'
+
+  when: installed.rc != 0
+
+- name: set knockd.conf
+  template:
+    src: knockd.conf
+    dest: /etc/knockd.conf
+
+- name: ensure knockd is running
+  systemd:
+    name: knockd
+    state: started
+    enabled: true
+

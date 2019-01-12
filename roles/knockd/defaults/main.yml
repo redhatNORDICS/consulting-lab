@@ -1,0 +1,3 @@
+---
+# defaults file for knockd
+knockd_nic: "{{ ansible_default_ipv4.interface }}"
