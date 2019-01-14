@@ -17,9 +17,13 @@
     chain: FORWARD
     policy: DROP
 
-# Now we loop through all of our networks
+# Now we loop through all of our libvirt_networks
+# If it's a open_network, we will configure FORWARDing and lock it down ourselves
 - name: Configure rules for all libvirt_networks
   include_tasks: libvirt-network.yml
   loop: "{{ libvirt_networks }}"
   loop_control:
     loop_var: network
+  when: "'open_network' in network.type"
+
+# SAVE RULES

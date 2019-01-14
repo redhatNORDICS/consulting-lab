@@ -1,6 +1,8 @@
 ---
+# This will create the FORWARD chains needed to set port openings per network combination.
 # 
-#
+# The task list expects a network object of the "open-network" type. See roles/libvirt_networks/README.md
+# It expects the bridge interface to have the name virbr-<network-name> 
 #
 
 - name: create a list of all networks except {{ network.name }}
