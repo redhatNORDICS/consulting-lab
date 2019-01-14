@@ -20,14 +20,14 @@ So if you have three networks:
 - net2
 
 The following FORWARD chains will be created:
-net1-to-mgmt: Traffic flowing from net1 to mgmt
-net2-to-mgmt: Traffic flowing from net2 to mgmt
+net1-to-mgmt: Traffic flowing from net1 to mgmt  
+net2-to-mgmt: Traffic flowing from net2 to mgmt  
 
-mgmt-to-net1: Traffic flowing from mgmt to net1
-net2-to-net1: Traffic flowing from net2 to net1
+mgmt-to-net1: Traffic flowing from mgmt to net1  
+net2-to-net1: Traffic flowing from net2 to net1  
 
-mgmt-to-net2: Traffic flowing from mgmt to net2
-net1-to-net2: Traffic flowing from net1 to net2
+mgmt-to-net2: Traffic flowing from mgmt to net2  
+net1-to-net2: Traffic flowing from net1 to net2  
 
 
 These chains comes empty, so by default nothing is Opened.
