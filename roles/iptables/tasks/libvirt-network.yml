@@ -1,0 +1,55 @@
+---
+# 
+#
+#
+
+- name: create a list of all networks except {{ network.name }}
+  set_fact:
+    other_nets: []
+
+- name: add networks to list except {{ network.name }}
+  set_fact:
+    other_nets: "{{ other_nets }} + [ '{{ item.name }}' ]"
+  with_items: "{{ libvirt_networks }}"
+  when: "'{{ network.name }}' not in item.name"
+
+- name: print list
+  debug:
+    msg: "{{ other_nets }}"
+
+- name: create the chains to {{ network.name }}
+  command: "iptables -N {{ item }}-to-{{ network.name }}"
+  with_items: "{{ other_nets }}"
+  ignore_errors: true
+
+- name: Allow inter-lan traffic on the network
+  iptables:
+    chain: FORWARD
+    action: insert
+    rule_num: 2
+    in_interface: "virbr-{{ network.name }}"
+    out_interface: "virbr-{{ network.name }}"
+    jump: ACCEPT
+    comment: "Allow inter-LAN traffic for {{ network.name }}"
+
+
+- name: Create FORWARD rule to chain {{ network.name }}
+  iptables:
+    action: insert
+    rule_num: 3
+    chain: FORWARD
+    jump: "{{ item }}-to-{{ network.name }}"
+    comment: "jump to {{ item }}-to-{{ network.name }}"
+    in_interface: virbr-{{ item }}
+    out_interface: virbr-{{ network.name }}
+  with_items: "{{ other_nets }}"
+
+- name: Allow all INPUT to network {{ network.name }}
+  iptables:
+    action: insert
+    rule_num: 2
+    chain: INPUT
+    jump: ACCEPT
+    in_interface: virbr-{{ network.name }}
+    comment: "Allow all incoming packages on virbr-{{ network.name }}. Filtering happens in FORWARD"
+
