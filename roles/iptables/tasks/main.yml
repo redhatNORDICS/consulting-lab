@@ -1,0 +1,25 @@
+---
+#
+#
+#
+
+- name: Allow all related and established connection on FORWARD
+  iptables:
+    action: insert
+    rule_num: 1
+    chain: FORWARD
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+  become: yes
+
+- name: Set default policy on FORWARD to DROP
+  iptables:
+    chain: FORWARD
+    policy: DROP
+
+# Now we loop through all of our networks
+- name: Configure rules for all libvirt_networks
+  include_tasks: libvirt-network.yml
+  loop: "{{ libvirt_networks }}"
+  loop_control:
+    loop_var: network
