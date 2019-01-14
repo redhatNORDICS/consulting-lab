@@ -1,0 +1,28 @@
+- hosts: labhost
+  become: true
+  tasks:
+  - name: destroy libvirt_networks
+    virt_net: 
+      command: destroy 
+      name: "{{ network.name }}"
+    loop: "{{ libvirt_networks }}"
+    loop_control:
+      loop_var: network
+    failed_when: false
+
+  - name: undefine libvirt_networks
+    virt_net: 
+      command: undefine
+      name: "{{ network.name }}"
+    loop: "{{ libvirt_networks }}"
+    loop_control:
+      loop_var: network
+
+  - name: cleanup iptable rules
+    include_role:
+      name: iptables
+      tasks_from: delete-libvirt-network.yml
+    loop: "{{ libvirt_networks }}"
+    loop_control:
+      loop_var: network
+
