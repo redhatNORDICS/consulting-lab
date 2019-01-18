@@ -13,8 +13,9 @@
 
 
 - name: "add ACCEPT rule to chain {{ from_net }}-to-{{ to_net }}"
+  become: true
   iptables:
     chain: "{{from_net}}-to-{{to_net}}"
     jump: ACCEPT
-    destination_port: {{ port }}
+    destination_port: "{{ port }}"
     protocol: "{{ proto }}" 
