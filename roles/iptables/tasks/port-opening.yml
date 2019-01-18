@@ -1,0 +1,20 @@
+---
+# This tasklist is meant to be called upon outside of the main.yml
+# Basically, you would do the role inclusion and spcify the tasklist
+#
+# import_role:
+#   name: iptables
+#   tasks_from: port-opening.yml
+# vars:
+#   from_net: 
+#   to_net:
+#   port: 
+#   proto: 
+
+
+- name: "add ACCEPT rule to chain {{ from_net }}-to-{{ to_net }}"
+  iptables:
+    chain: "{{from_net}}-to-{{to_net}}"
+    jump: ACCEPT
+    destination_port: {{ port }}
+    protocol: "{{ proto }}" 
