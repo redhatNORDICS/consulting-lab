@@ -52,10 +52,11 @@ labhost ansible_host=12.13.14.15
 ***Modify the group_vars/labhost***
 
 - Set the network ranges you want to use
+- Add your user to the user dict, including your pub key
 ```
-```
-- Add your user to the user dir, including your pub key
-```
+users:
+- name: me
+  public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVCzcQ24XJE9lW92mLNmOOXQXC8bDgaC7JmUKbv2kKh6+AIPnWuIXBuU+zVJrrgzmFT8eiqseOAB6jKNv0VcC1oq6vbeDoSBEaSlh2d+mbWIapYsVYW6zdxq6tzvgB3nuRniblDiGlU0Dne9XRSqKJrgHG+yrK34OhdRPChVZ7AEQhjtYImCCBQpUcz15VfTXkWSDj7TKIzxhm7LuhdhRaAuM74DaYBcZideWVHFlgSTyuEYGToUl4S2ddvD+qZwiY0NOXJzezgn1SBB1UZzSGdtbVtpnZ/iGd7AbV/QlmVSrL+lm9LqknPmMCOeBGaCbEYXVNDCHe0CpB+WNojV9Z me@workstation"
 
 ```
 
