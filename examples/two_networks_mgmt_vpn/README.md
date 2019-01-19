@@ -14,8 +14,7 @@ Last step (yet to be implemented) is to shut the door for wide open SSH, and req
 How to use this example
 -----------------------
 
-Clone the repo to your workstation or from where you want to run the playbook from and then enter the example dir. 
-
+***Clone the repo to your workstation or from where you want to run the playbook from and then enter the example dir.***
 ```
 $ git clone https://github.com/redhatNORDICS/consulting-lab.git
 Cloning into 'consulting-lab'...
@@ -27,35 +26,40 @@ Resolving deltas: 100% (29/29), done.
 $ cd consulting-lab/examples/two_networks_mgmt_vpn/
 ```
 
-Make sure that labhost is resolvable:
+***Make sure that labhost is resolvable:***
 
 The inventory consist of one host, labhost
 ``` 
-# inventory
+# ./inventory
 labhost
 
 ```
 
 _Either_, add the ip address of your labhost directly in the ansible inventory file:
 ```
-# inventory
+# ./inventory
 
 labhost ansible_host=12.13.14.15
 ```
 
-or, add the alias in your /etc/hosts file. This might come in handy when you wanna ssh and whatnot later. 
+***or***, add the alias in your /etc/hosts file. This might come in handy when you wanna ssh and whatnot later. 
 ```
 # /etc/hosts
 
 12.13.14.15 labhost
 ```
 
-Modify the group_vars/labhost
+***Modify the group_vars/labhost***
 
-- Set the network ranges you want to see
+- Set the network ranges you want to use
+```
+```
 - Add your user to the user dir, including your pub key
+```
 
+```
 
+::: info
 If you want it really end to end, and want to automate the hetzner install for you, you can add the role hetzner-provision before all other roles.
 ```
 - hosts: labhost
@@ -76,7 +80,7 @@ If you want it really end to end, and want to automate the hetzner install for y
     vars: 
       start_sync: true
 ```
-
+:::
 
 
 Run it! 
