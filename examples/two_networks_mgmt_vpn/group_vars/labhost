@@ -1,0 +1,48 @@
+# This is the vars file that we use to provide the variables we want for ALL roles and configure and describe the whole lab environment.
+
+# users role
+users:
+- name: moss
+  public_key: "ssh-rsa <replaceme>"
+
+# libvirt
+libvirt_networks:
+- name: mgmt
+  type: nat_network_dhcp
+  address: 10.0.0.0
+  interface_address: 10.5.0.1
+  netmask: 255.255.255.0
+  prefix: 24
+  dhcp_range_start: 10.5.0.100
+  dhcp_range_stop: 10.5.0.254
+
+- name: net1
+  type: open_network
+  address: 10.101.0.0
+  interface_address: 10.101.0.1
+  netmask: 255.255.255.0
+  prefix: 24
+  dhcp_range_start: 10.101.0.2
+  dhcp_range_stop: 10.101.0.254
+
+- name: net2
+  type: open_network
+  address: 10.102.0.0
+  interface_address: 10.102.0.1
+  netmask: 255.255.255.0
+  prefix: 24
+  dhcp_range_start: 10.102.0.2
+  dhcp_range_stop: 10.102.0.254
+
+# OpenVPN
+openvpn_network: 172.16.99.0
+openvpn_network_gw: 172.16.99.1
+openvpn_network_client: 172.16.99.2
+
+
+# knockd
+#knockd_nic: "eth0"
+#knockd_ssh_alternate_port: 443 (not implemented yet)
+knockd_1seq: "1234:udp"
+knockd_2seq: "1234:tcp"
+knockd_3seq: "1234:udp"
