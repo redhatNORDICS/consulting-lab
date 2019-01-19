@@ -1,11 +1,11 @@
 2 networks, 1 mgmt network, VPN
 ===============================
 
-Run against a Hetzner host put into Rescue mode.
-Sets up a Hetzner host with Centos7 and installs the basics, configures users and installs and configures OpenVPN.
+Run against a Hetzner host that has _either_ been put into Rescue/New installation mode or have been configured with a Centos7 image.
 
-After VPN has been configured it will install and configure libvirt and the networks.
-With the networks in place, the iptables role will create the FORWARDING rules for each network.
+The playbook will set up your host with Centos7 and installs the basics, configures users and installs and configures OpenVPN.
+
+After VPN has been configured it will install and configure libvirt and 3 virtual networks that are by default locked down.
 
 At the end of playbook run you should be able to get started with provisioning VM's.
 
