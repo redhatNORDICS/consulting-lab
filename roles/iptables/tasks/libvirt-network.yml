@@ -46,6 +46,13 @@
     out_interface: virbr-{{ network.name }}
   with_items: "{{ other_nets }}"
 
+- name: "Add DROP log rule to each -to-{{ network.name }} chain"
+  iptables:
+    chain: "{{ item }}-to-{{ network.name }}"
+    jump: LOG
+    log_prefix: "DROP ({{ item }}-to-{{ network.name }}): "
+  with_items: "{{ other_nets }}"
+
 - name: Allow all INPUT to network {{ network.name }}
   iptables:
     action: insert
