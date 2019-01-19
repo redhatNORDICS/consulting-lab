@@ -80,7 +80,7 @@ labhost ansible_host=12.13.14.15
   - role: mdadm-sync
     vars: 
       start_sync: true
-``` |
+ ``` |
 
 
 Run it! 
