@@ -1,0 +1,8 @@
+- hosts: labhost
+  become: true
+  tasks:
+  - name: turn off sync
+    import_role:
+      name: mdadm-sync
+    vars:
+      stop_sync: true
