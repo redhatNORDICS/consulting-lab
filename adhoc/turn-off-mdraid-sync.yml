@@ -3,6 +3,6 @@
   tasks:
   - name: turn off sync
     import_role:
-      name: hetzner-raid
+      name: mdadm-sync
     vars:
       stop_sync: true
