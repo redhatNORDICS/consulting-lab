@@ -63,6 +63,7 @@ labhost ansible_host=12.13.14.15
 | If you want it really end to end, and want to automate the hetzner install for you, you can add the role hetzner-provision before all other roles. |  
 | --- |  
 | ```
+|
 - hosts: labhost
   user: root
   gather_facts: true
@@ -80,6 +81,7 @@ labhost ansible_host=12.13.14.15
   - role: mdadm-sync
     vars: 
       start_sync: true
+|
  ``` |
 
 
