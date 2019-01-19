@@ -1,0 +1,13 @@
+---
+# 
+- hosts: labhost
+  tasks:
+  - name: Open port 8443/tcp from net1 to net2
+    import_role:
+      name: iptables
+      tasks_from: port-opening.yml
+    vars:
+      from_net: net1
+      to_net: net2
+      port: 8443
+      proto: tcp

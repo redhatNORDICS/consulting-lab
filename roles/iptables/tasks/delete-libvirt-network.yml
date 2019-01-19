@@ -1,0 +1,34 @@
+---
+
+- name: create a list of all networks except {{ network.name }}
+  set_fact:
+    other_nets: []
+
+- name: add networks to list except {{ network.name }}
+  set_fact:
+    other_nets: "{{ other_nets }} + [ '{{ item.name }}' ]"
+  with_items: "{{ libvirt_networks }}"
+  when: "'{{ network.name }}' not in item.name"
+
+- name: print list
+  debug:
+    msg: "{{ other_nets }}"
+
+- name: Flush chains to {{ network.name }}
+  command: "iptables -F {{ item }}-to-{{ network.name }}"
+  with_items: "{{ other_nets }}"
+  failed_when: false
+
+- name: Delete FORWARD rule to chain {{ network.name }}
+  command: "iptables -D FORWARD -i virbr-{{ item }} -o virbr-{{ network.name }} -m comment --comment 'jump to {{ item }}-to-{{ network.name }}' -j {{ item }}-to-{{ network.name }}"
+  with_items: "{{ other_nets }}"
+  failed_when: false
+
+- name: Delete chains to {{ network.name }}
+  command: "iptables -X {{ item }}-to-{{ network.name }}"
+  with_items: "{{ other_nets }}"
+  ignore_errors: true
+
+- name: Delete Allow all INPUT to network {{ network.name }}
+  command: "iptables -D INPUT -i virbr-{{ network.name }} -m comment --comment 'Allow all incoming packages on virbr-{{ network.name }}. Filtering happens in FORWARD' -j ACCEPT"
+
