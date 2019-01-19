@@ -1,14 +1,16 @@
----
-# 1st playbook
-# Will configure the basics and the VPN + ssh
-# It will 
 - hosts: labhost
   user: root
+  gather_facts: true
   roles:
+  - role: mdadm-sync
+    vars: 
+      stop_sync: true 
   - users
-  - base
-  - motd
   - openvpn
-  - sshd
-
-
+  - libvirt
+  - libvirt_network 
+  - iptables
+  - knockd
+  - role: mdadm-sync
+    vars: 
+      start_sync: true 
