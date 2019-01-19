@@ -56,6 +56,29 @@ Modify the group_vars/labhost
 - Add your user to the user dir, including your pub key
 
 
+If you want it really end to end, and want to automate the hetzner install for you, you can add the role hetzner-provision before all other roles.
+```
+- hosts: labhost
+  user: root
+  gather_facts: true
+  roles:
+  - hetzner-provision  <------
+  - role: mdadm-sync
+    vars: 
+      stop_sync: true
+  - users
+  - openvpn
+  - libvirt
+  - libvirt_network
+  - iptables
+  - knockd
+  - role: mdadm-sync
+    vars: 
+      start_sync: true
+```
+
+
+
 Run it! 
 
 ```
