@@ -1,7 +1,7 @@
 - assert:
     that:
-    - iso_directory is defined
-    - iso_filename is defined
+    - image_directory is defined
+    - image_filename is defined
 
 - name: get certs
   shell: "ls /etc/pki/entitlement/*  | grep -v '\\-key.pem'"
@@ -25,7 +25,7 @@
     url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_file }}
     client_cert: "{{ cdn_certs[0] }}"
     client_key: "{{ cdn_keys[0] }}"
-    dest: "{{ iso_directory }}/{{ iso_filename }}"
+    dest: "{{ image_directory }}/{{ image_filename }}"
     mode: 755
     validate_certs: false
   when: not async  | default(false)
@@ -35,9 +35,9 @@
     url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_file }}
     client_cert: "{{ cdn_certs[0] }}"
     client_key: "{{ cdn_keys[0] }}"
-    dest: "{{ iso_directory }}/{{ iso_filename }}"
+    dest: "{{ image_directory }}/{{ image_filename }}"
     mode: 755
-  register: iso_download_sleeper
+  register: image_download_sleeper
   async: 5
   poll: 0
   when: async | default(false)
