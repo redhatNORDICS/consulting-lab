@@ -1,0 +1,31 @@
+---
+- assert:
+    that:
+      - "'rh_username' is defined"
+      - "'rh_password' is defined"
+
+- name: ensure subscription-manager is installed
+  yum:
+    name: subscription-manager
+    state: installed
+
+- name: check subscription status
+  command: subscription-manager status
+  ignore_errors: true
+  failed_when: false
+  register: subman_status
+
+- block:
+  - name: register 
+    command: "subscription-manager register --username {{ rh_username }} --password '{{ rh_password }}'"
+    no_log: true
+
+  - name: get pool
+    command: subscription-manager list  --matches="Employee SKU" --available --pool-only
+    register: subman_pool
+
+  - name: attach
+    command: "subscription-manager attach --pool {{ subman_pool.stdout_lines[0] }}"
+  when: "'Current' not in subman_status"
+  
+  

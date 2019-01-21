@@ -1,0 +1,2 @@
+image_file: rhel-server-7.6-x86_64-dvd.iso
+image_destination: /var/lib/libvirt/images/
