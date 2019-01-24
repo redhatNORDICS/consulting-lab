@@ -45,7 +45,7 @@ rhel_iso_async: true
 ```
 
 There is a adhoc playbook for you to use that shows how to run this role independently: 
-link to ahdoc
+[download_iso.yml](/adhoc/download_iso.yml)
 
 
 ```
