@@ -1,8 +1,8 @@
 - hosts: labhost
   become: true
   vars:
-    async: true
-    iso_directory: /var/lib/libvirt/images/
-    iso_filename: rhel-server-7.6-x86_64-dvd.iso
+    rhel_iso_async: true
+    image_dest_dir: /var/lib/libvirt/images/
+    image_filename: rhel-server-7.6-x86_64-dvd.iso
   roles:
   - rhel-iso-download
