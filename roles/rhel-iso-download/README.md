@@ -37,6 +37,12 @@ image_dest_dir: /home/me/isos/
 image_filename: rhel-server-7.4-x86_64.iso
 ```
 
+Asyncronous download is disabled by default, but can be turned on with `rhel_iso_async:`  
+```
+image_dest_dir: /home/me/isos/
+image_filename: rhel-server-7.4-x86_64.iso
+rhel_iso_async: true
+```
 
 There is a adhoc playbook for you to use that shows how to run this role independently: 
 link to ahdoc

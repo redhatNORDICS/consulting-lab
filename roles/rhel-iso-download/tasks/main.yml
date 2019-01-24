@@ -28,7 +28,7 @@
     dest: "{{ image_dest_dir }}/{{ image_filename }}"
     mode: 755
     validate_certs: false
-  when: not async  | default(false)
+  when: not rhel_iso_async  | default(false)
 
 - name: download ISO (fire and forget)
   get_url:
@@ -40,4 +40,4 @@
   register: image_download_sleeper
   async: 5
   poll: 0
-  when: async | default(false)
+  when: rhel_iso_async | default(false)
