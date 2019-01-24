@@ -48,9 +48,4 @@ There is a adhoc playbook for you to use that shows how to run this role indepen
 [download_iso.yml](/adhoc/download_iso.yml)
 
 
-```
-subscription-manager 
-
-```
-
 
