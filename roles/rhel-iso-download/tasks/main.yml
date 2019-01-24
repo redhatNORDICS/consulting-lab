@@ -1,6 +1,6 @@
 - assert:
     that:
-    - image_directory is defined
+    - image_dest_dir is defined
     - image_filename is defined
 
 - name: get certs
@@ -22,20 +22,20 @@
 
 - name: download ISO (might take a while)
   get_url:
-    url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_file }}
+    url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_filename }}
     client_cert: "{{ cdn_certs[0] }}"
     client_key: "{{ cdn_keys[0] }}"
-    dest: "{{ image_directory }}/{{ image_filename }}"
+    dest: "{{ image_dest_dir }}/{{ image_filename }}"
     mode: 755
     validate_certs: false
   when: not async  | default(false)
 
 - name: download ISO (fire and forget)
   get_url:
-    url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_file }}
+    url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_filename }}
     client_cert: "{{ cdn_certs[0] }}"
     client_key: "{{ cdn_keys[0] }}"
-    dest: "{{ image_directory }}/{{ image_filename }}"
+    dest: "{{ image_dest_dir }}/{{ image_filename }}"
     mode: 755
   register: image_download_sleeper
   async: 5
