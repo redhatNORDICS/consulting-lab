@@ -20,7 +20,12 @@ Instead you have to make sure that this role is called after subman
 Vars
 ----
 
-Right now we default to download the rhel-server-7.6-x86_64.iso, but you can download a different iso by overriding the var `image_filename`. 
+Right now, the default file to download is `rhel-server-7.6-x86_64.iso`, but you can download a different image by overriding the var `image_filename`.  
+Suggestions:  
+- rhel-server-7.5-x86_64-dvd.iso  
+- rhel-server-7.4-x86_64-dvd.iso  
+- rhel-server-7.6-x86_64-kvm.qcow2  
+
 ```
 image_filename: rhel-server-7.4-x86_64-dvd.iso
 ```
@@ -29,7 +34,7 @@ The default download destination is `/var/lib/libvirt/images/`.
 You can override this with the var `image_dest_dir:`
 ```
 image_dest_dir: /home/me/isos/
-image_file: rhel-server-7.4-x86_64.iso
+image_filename: rhel-server-7.4-x86_64.iso
 ```
 
 
