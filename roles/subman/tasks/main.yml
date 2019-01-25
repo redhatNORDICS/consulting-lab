@@ -26,6 +26,6 @@
 
   - name: attach
     command: "subscription-manager attach --pool {{ subman_pool.stdout_lines[0] }}"
-  when: "'Current' not in subman_status"
+  when: "'Current' not in subman_status.stdout"
   
   
