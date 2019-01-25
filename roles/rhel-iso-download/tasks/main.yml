@@ -1,0 +1,43 @@
+- assert:
+    that:
+    - image_dest_dir is defined
+    - image_filename is defined
+
+- name: get certs
+  shell: "ls /etc/pki/entitlement/*  | grep -v '\\-key.pem'"
+  register: certs
+
+- name: set_fact certs
+  set_fact:
+    cdn_certs: "{{ certs.stdout_lines }}"
+
+- name: get keys
+  #command: "ls /etc/pki/entitlement/*-key.pem"
+  shell: "ls /etc/pki/entitlement/*  | grep  '\\-key.pem'"
+  register: cdn_keys
+
+- name: set_fact
+  set_fact:
+    cdn_keys: "{{ cdn_keys.stdout_lines }}"
+
+- name: download ISO (might take a while)
+  get_url:
+    url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_filename }}
+    client_cert: "{{ cdn_certs[0] }}"
+    client_key: "{{ cdn_keys[0] }}"
+    dest: "{{ image_dest_dir }}/{{ image_filename }}"
+    mode: 755
+    validate_certs: false
+  when: not rhel_iso_async  | default(false)
+
+- name: download ISO (fire and forget)
+  get_url:
+    url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_filename }}
+    client_cert: "{{ cdn_certs[0] }}"
+    client_key: "{{ cdn_keys[0] }}"
+    dest: "{{ image_dest_dir }}/{{ image_filename }}"
+    mode: 755
+  register: image_download_sleeper
+  async: 5
+  poll: 0
+  when: rhel_iso_async | default(false)
