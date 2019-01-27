@@ -21,6 +21,7 @@
     - python-lxml
     - epel-release
     - cockpit
+    - cockpit-machines
 
 - name: start and enable cockpit
   service:
