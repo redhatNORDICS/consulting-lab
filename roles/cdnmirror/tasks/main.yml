@@ -1,0 +1,77 @@
+---
+# tasks file for repomgmt
+
+- assert:
+    that:
+      - rh_username is defined
+      - rh_password is defined
+
+- name: register system
+  redhat_subscription:
+    #pool: "^Employee SKU$"
+    pool_ids: 
+      - {{ rh_poolids }}
+    username: "{{ rh_username }}"
+    password: "{{ rh_password }}"
+
+- name: check repos
+  shell: yum repolist | wc -l
+  changed_when: false
+  register: repolist
+
+- name: fix repos
+  command: subscription-manager repos --disable "*" --enable rhel-7-server-rpms
+  when: repolist.stdout != "4"
+
+- name: install packages
+  yum:
+    name: httpd,python-mako,yum-utils,createrepo
+    state: installed
+
+- name: enable httpd
+  service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: copy repomgmt files
+  synchronize:
+    src: repomgmt
+    dest: /opt/
+
+#this certificate can be found in /etc/pki/product-default on a RHVH node
+#- name: copy 328.pem
+#  copy:
+#    src: 328.pem
+#    dest: /etc/pki/product-default/328.pem
+
+- name: create /usr/share/repomgmt
+  file:
+    dest: /usr/share/repomgmt
+    state: directory
+
+- name: copy template file
+  copy:
+    src: yum.repo.tmpl
+    dest: /usr/share/repomgmt/yum.repo.tmpl
+
+- name: configure repos to sync
+  template:
+    src: repoconfig.j2
+    dest: /etc/sysconfig/repoconfig
+
+- name: configure cronjob
+  cron:
+    name: "sync repos"
+    cron_file: /etc/cron.d/sync_repos
+    user: root
+    minute: 0
+    hour: 3
+    job: /opt/repomgmt/sbin/repo-sync.sh && /opt/repomgmt/sbin/repo-createrepo.sh && /opt/repomgmt/bin/genyumrepofiles.py
+
+- name: set cron email
+  cronvar:
+    name: MAILTO
+    value: "{{ cron_mailto }}"
+    cron_file: /etc/cron.d/sync_repos
+  when: cron_mailto is defined
