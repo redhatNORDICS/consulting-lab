@@ -1,0 +1,16 @@
+################################################################
+
+  {{ ansible_distribution }} {{ ansible_distribution_version }} {{ ansible_architecture }}
+  
+  fqdn: {{ inventory_hostname }} ({{ ansible_default_ipv4.address }})
+  selinux: {{ ansible_selinux.status | default(ansible_selinux.config_mode) }}
+  memory: {{ ansible_memtotal_mb }}
+  cpu count: {{ ansible_processor_count }} cores: {{ ansible_processor_cores }} tpc: {{ ansible_processor_threads_per_core }} vcpus: {{ ansible_processor_vcpus }}
+
+  Member of: {% for group in hostvars[inventory_hostname]['group_names'] %}{{ group }} {% endfor %}
+
+
+################################################################
+
+This server is under ansible control! Local changes may be lost.
+
