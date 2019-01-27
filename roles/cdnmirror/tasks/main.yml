@@ -1,8 +1,6 @@
 ---
 # tasks file for repomgmt
 
-#TODO: symlinks
-
 - assert:
     that:
       - rh_username is defined
@@ -12,7 +10,7 @@
   redhat_subscription:
     #pool: "^Employee SKU$"
     pool_ids: 
-      - 8a85f98260c27fc50160c32cc4365ccb
+      - {{ rh_poolids }}
     username: "{{ rh_username }}"
     password: "{{ rh_password }}"
 
