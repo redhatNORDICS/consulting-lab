@@ -8,13 +8,23 @@ The role is intended to be run on a small dedicated VM
 Role Variables
 --------------
 
-Variables that needs to be set are
+**Mandatory** variables that needs to be set are
 
-* rh_username
-* rh_password
+| variable    | default value |
+| ----------- | ------------- |
+| rh_username | null          |
+| rh_password | null          |
+
+
 
 Repos to sync can be overridden with the repos variable
 
+| variable | default value                                                             |
+| -------- | ------------------------------------------------------------------------- |
+| repos    | rhel-7-server-rpms rhel-7-server-extras-rpms rhel-7-server-rh-common-rpms |
+
+Example how to override
+
 ```
-repos: rhel-7-server-rpms rhel-7-server-extras-rpms rhel-7-server-rh-common-rpms
+repos: rhel-7-server-rpms rhel-7-server-extras-rpms rhel-7-server-rh-common-rpms 
 ```
