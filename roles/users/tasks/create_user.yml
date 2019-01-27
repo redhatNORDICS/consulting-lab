@@ -3,6 +3,7 @@
 - name: Create user
   user:
     name: "{{ user.name }}"
+    groups: "{{ user.groups | default('') }}"
 
 - block:
   - name: touch /etc/sudoers.d/users
