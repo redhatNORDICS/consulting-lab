@@ -28,6 +28,6 @@
 
 - name: start reposync
   command: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n
-  async: 5
+  async: 10 
   poll: 0
   register: reposync_job
