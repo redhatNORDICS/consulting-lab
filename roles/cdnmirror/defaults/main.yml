@@ -1,0 +1,8 @@
+---
+# defaults file for repomgmt
+repos: rhel-7-server-rpms rhel-7-server-extras-rpms rhel-7-server-rh-common-rpms
+cron_mailto: False
+
+#the pool containing the subs for syncing
+rh_poolids: 
+  - 8a85f98260c27fc50160c32cc4365ccb

@@ -15,10 +15,10 @@
     - epel-release
 
 - name: disable firewalld
-  service:
+  yum:
     name: firewalld
-    state: stopped
-    enabled: false
+    state: absent
+    
 
 - name: enable services
   service:

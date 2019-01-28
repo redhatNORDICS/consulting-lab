@@ -4,6 +4,13 @@
   template:
     src: hetzner.config
     dest: /root/hetzner.config
+  when: override_hetzner_installimage_config is not defined and ansible_fqdn == "rescue"
+
+- name: override configuration file
+  template:
+    src: custom.config
+    dest: /root/hetzner.config
+  when: override_hetzner_installimage_config is defined and ansible_fqdn == "rescue"
 
 - command: file /root/hetzner.config 
   register: whoami
@@ -14,12 +21,15 @@
 - name: run the setup (long running task. approx 5min)
   command: /root/.oldroot/nfs/install/installimage -c /root/hetzner.config -a 
   register: installimage
+  when: ansible_fqdn == "rescue"
 
 - name: reboot and wait until connection is done 
   import_role:
     name: reboot
   tags: reboot
+  when: installimage.changed
   
 - name: We are done rebooting
   command: echo "We are done rebooting"
+  when: installimage.changed
 
