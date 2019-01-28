@@ -22,12 +22,16 @@
     state: started
     enabled: true
 
-- name: configure upstream RHEL repo (CentOS)
-  include_tasks: centos_repo.yml
-  when: ansible_distribution == 'CentOS'
+- name: enable rhel-7-server-rpms repo
+  command: subscription-manager repos --enable rhel-7-server-rpms
 
 - name: start reposync
   command: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n
   async: 10 
   poll: 0
   register: reposync_job
+
+- name: disable rhel-7-server-rpms repo (CentOS)
+  command: subscription-manager repos --disable rhel-7-server-rpms
+  when: ansible_distribution == 'CentOS'
+
