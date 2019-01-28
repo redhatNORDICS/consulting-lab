@@ -57,7 +57,7 @@ We do this with:_
   register: reposync_job
 
 ```
-_We register the job in the var `reposync_job`.  
+We register the job in the var `reposync_job`.  
 This way we can catch it at the end of our playbook run and perform the last steps in the final.yml.
 
 
