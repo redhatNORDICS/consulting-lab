@@ -14,26 +14,33 @@ The role should work for both CentOS and RHEL, but it requires that subscription
 This is taken care of by the [`subman` role](/roles/subman/)
 
 What it does
-============
+------------
 The role is split into 2 _phases_, because the reposync is long running job which can easily take up to 30 mins to complete (~4.5GB rpms). 
-So to complete the reposync you have to call on this role twice but with different tags. 
-First by using it with the tag `setup` and later when we have completed all the inbetween steps that we want to do, we call on it again with the tag `final`. 
+So to complete the reposync you have to call on this role twice but with different `phase:` values. 
+First by using it with the `phase: setup` and later when we have completed all the inbetween steps that we want to do, we call on it again with  `phase: final`.  
+_Note: Tags may seem as the go-to functionality for this sorta thing. But as there is no way (afaik) to set a tag from the playbook itself. It has to bu supplied on the commandline. Ultimatly this means we can't use tags for calling the role sequenced as we want._
 
 ```
 - hosts: labhost
   roles:
   - subman
-  - reposync
-    tags: setup
+  - role: reposync
+    vars:
+      phase: setup
   - inbetween-role1 
   - inbetween-role2
-  - reposync
-    tags: final
+  - role: reposync
+    vars:
+      phase: final
 ```
 
 _This funcionality of only running final when supplying the tag `final` is done with the special tag [`never`](https://docs.ansible.com/ansible/latest/user_guide/playbooks_tags.html#special-tags)`
 
 # main.yml 
+
+Launches either setup.yml or final.yml depending on the value of `phase:`
+
+# setup.yml
 
 Installs apache and repo utilities. 
 
@@ -47,7 +54,7 @@ We do this with:_
 ```
 - name: start reposync
   command: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n
-  async: 5
+  async: 7200
   poll: 0
   register: reposync_job
 
@@ -57,3 +64,50 @@ This way we can catch it at the end of our playbook run and perform the last ste
 
 
 # final.yml
+
+Waits in the async job to complete.
+
+```
+# (300*10)/60=50min
+- name: Wait for the reposync job to finish
+  async_status: 
+    jid: "{{ reposync_job.ansible_job_id }}"
+  register: job_result
+  until: job_result.finished
+  retries: 300
+  delay: 10 
+```
+
+Then run the `createrepo` utility to create the required metadata.
+
+End result
+----------
+
+When the role have been run with both sequences you should have a rhel-7-server-repo published on the labhost itself.  
+`http://localhost/repos/rhel-7-server-rpms/`
+
+Note that we do not add any iptable rules for this.
+Any host on any libvirt network we create are allowed to talk to their gateway, where the repo is served.
+
+So one can now configure a yum repo on the gateway address. 
+```
+# network: mgmt
+# ip: 10.15.0.124
+# gw: 10.15.0.1
+
+# cat /etc/yum.repos.d/labhost.repo
+[labhost-rhel7]
+name=labhost-rhel7
+baseurl=http://10.15.0.1/rhel-7-server-rpms/
+enabled=1
+gpgcheck=0
+
+
+# yum repolist
+Loaded plugins: product-id, search-disabled-repos, subscription-manager
+This system is not registered with an entitlement server. You can use subscription-manager to register.
+repo id                                                                                               repo name                                                                                              status
+labhost-rhel7                                                                                         labhost-rhel7                                                                                          5,375
+repolist: 5,375
+```
+
