@@ -27,3 +27,6 @@
   when: "'open_network' in network.type"
 
 # SAVE RULES
+- name: Save rules
+  shell: iptables-save > /etc/sysconfig/iptables
+

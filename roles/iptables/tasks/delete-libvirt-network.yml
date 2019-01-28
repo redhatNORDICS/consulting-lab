@@ -32,3 +32,6 @@
 - name: Delete Allow all INPUT to network {{ network.name }}
   command: "iptables -D INPUT -i virbr-{{ network.name }} -m comment --comment 'Allow all incoming packages on virbr-{{ network.name }}. Filtering happens in FORWARD' -j ACCEPT"
 
+- name: save iptables rules
+  shell: iptables-save > /etc/sysconfig/iptables
+

@@ -19,3 +19,7 @@
     jump: ACCEPT
     destination_port: "{{ port }}"
     protocol: "{{ proto }}" 
+
+- name: save iptables rules
+  shell: iptables-save > /etc/sysconfig/iptables
+
