@@ -1,0 +1,16 @@
+- name: Wait for the reposync job to finish
+  async_status: jid={{ reposync_job.ansible_job_id }}
+  register: job_result
+  until: job_result.finished
+  retries: 30
+
+- name: Run createrepo in /var/www/html/pub/repos/
+  command: createrepo /var/www/html/pub/repos/
+
+- name: Set selinux context
+  debug:
+    msg: selinux/var/www/html/pub/repos/
+
+- name: restorecon
+  debug:
+    msg: restorecon /var/www/html/pub/repos/

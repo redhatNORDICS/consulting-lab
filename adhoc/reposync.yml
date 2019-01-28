@@ -1,0 +1,10 @@
+- hosts: labhost
+  become: true
+  roles:
+  - role: reposync
+    vars:
+      phase: setup
+  - role: reposync
+    vars:
+      phase: final
+

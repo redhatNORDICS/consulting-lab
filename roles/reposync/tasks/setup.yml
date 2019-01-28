@@ -1,0 +1,33 @@
+---
+# This is the 1st phase. 
+# Setting up apache and kickinf off the reposync
+# make sure subscription manager subman role has been run before and entitled your Labhost with a RHEL subscription.
+
+- name: install packages
+  yum:
+    name: httpd,python-mako,yum-utils,createrepo
+    state: installed
+
+- name: create pub directory for repos
+  file:
+    path: /var/www/html/pub/repos
+    state: directory
+    setype: httpd_sys_content_t
+    group: apache
+    owner: apache
+
+- name: enable httpd
+  service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: configure upstream RHEL repo (CentOS)
+  include_tasks: centos_repo.yml
+  when: ansible_distribution == 'CentOS'
+
+- name: start reposync
+  command: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n
+  async: 5
+  poll: 0
+  register: reposync_job
