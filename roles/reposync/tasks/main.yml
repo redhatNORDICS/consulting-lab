@@ -1,0 +1,16 @@
+---
+# make sure subscription manager subman role has been run before and entitled your Labhost with a RHEL subscription.
+#
+- name: check for phase
+  assert:
+    that:
+      - "'setup' in phase or 'final' in phase"
+    msg: "phase: must be either 'setup' or 'final'"
+
+- name: "1st phase: Setup"
+  include_tasks: setup.yml
+  when: "'setup' in phase"
+
+- name: "2nd phase: Final"
+  include_tasks: final.yml
+  when: "'final' in phase"

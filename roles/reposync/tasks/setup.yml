@@ -1,0 +1,64 @@
+---
+# This is the 1st phase. 
+# Setting up apache and kickinf off the reposync
+# make sure subscription manager subman role has been run before and entitled your Labhost with a RHEL subscription.
+
+- name: install packages
+  yum:
+    name: httpd,python-mako,yum-utils,createrepo,policycoreutils-python
+    state: installed
+
+- name: create pub directory for repos
+  file:
+    path: /var/www/html/pub/repos
+    state: directory
+    setype: httpd_sys_content_t
+    group: apache
+    owner: apache
+
+
+- name: remove welcome.conf
+  file:
+    state: absent
+    path: /etc/httpd/conf.d/welcome.conf
+
+- name: remove userdir.conf
+  file:
+    state: absent
+    path: /etc/httpd/conf.d/userdir.conf
+
+- name: create repos vhost
+  copy:
+    src: repo.vhost.conf
+    dest: /etc/httpd/conf.d/repos.conf
+    mode: 644
+    owner: root
+    group: root
+
+- name: enable httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: true
+
+- name: enable 7Server
+  command: subscription-manager release --set 7Server
+
+- name: enable rhel-7-server-rpms
+  command: subscription-manager
+
+# Fire and forget. Allow up to 2hours
+- name: start reposync
+  shell: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n | tee /var/log/reposync.$(date +%Y%m%d).log
+  async: 7200
+  poll: 0
+  register: reposync_job
+
+- name: unset release
+  command: subscription-manager release --unset
+  when: ansible_distribution == 'CentOS'
+
+- name: disable rhel-7-server
+  command: subscription-manager repos --disable rhel-7-server-rpms
+  when: ansible_distribution == 'CentOS'
+
