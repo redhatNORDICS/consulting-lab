@@ -34,13 +34,11 @@ _Note: Tags may seem as the go-to functionality for this sorta thing. But as the
       phase: final
 ```
 
-_This funcionality of only running final when supplying the tag `final` is done with the special tag [`never`](https://docs.ansible.com/ansible/latest/user_guide/playbooks_tags.html#special-tags)`
-
-# main.yml 
+### main.yml 
 
 Launches either setup.yml or final.yml depending on the value of `phase:`
 
-# setup.yml
+### setup.yml
 
 Installs apache and repo utilities. 
 
@@ -63,7 +61,7 @@ _We register the job in the var `reposync_job`.
 This way we can catch it at the end of our playbook run and perform the last steps in the final.yml.
 
 
-# final.yml
+### final.yml
 
 Waits in the async job to complete.
 
@@ -86,7 +84,7 @@ End result
 When the role have been run with both sequences you should have a rhel-7-server-repo published on the labhost itself.  
 `http://localhost/repos/rhel-7-server-rpms/`
 
-Note that we do not add any iptable rules for this.
+Note that we do not add any iptable rules for this.  The repo is not served publically but only to the lab environment.  
 Any host on any libvirt network we create are allowed to talk to their gateway, where the repo is served.
 
 So one can now configure a yum repo on the gateway address. 
