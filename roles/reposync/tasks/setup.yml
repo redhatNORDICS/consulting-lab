@@ -5,7 +5,7 @@
 
 - name: install packages
   yum:
-    name: httpd,python-mako,yum-utils,createrepo
+    name: httpd,python-mako,yum-utils,createrepo,policycoreutils-python
     state: installed
 
 - name: create pub directory for repos
@@ -16,10 +16,29 @@
     group: apache
     owner: apache
 
+
+- name: remove welcome.conf
+  file:
+    state: absent
+    path: /etc/httpd/conf.d/welcome.conf
+
+- name: remove userdir.conf
+  file:
+    state: absent
+    path: /etc/httpd/conf.d/userdir.conf
+
+- name: create repos vhost
+  copy:
+    src: repo.vhost.conf
+    dest: /etc/httpd/conf.d/repos.conf
+    mode: 644
+    owner: root
+    group: root
+
 - name: enable httpd
   service:
     name: httpd
-    state: started
+    state: restarted
     enabled: true
 
 - name: enable rhel-7-server-rpms repo
@@ -27,7 +46,7 @@
 
 - name: start reposync
   command: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n
-  async: 10 
+  async: 20 
   poll: 0
   register: reposync_job
 
