@@ -1,16 +1,18 @@
 - name: Wait for the reposync job to finish
-  async_status: jid={{ reposync_job.ansible_job_id }}
+  async_status: 
+    jid: "{{ reposync_job.ansible_job_id }}"
   register: job_result
   until: job_result.finished
   retries: 30
+  delay: 10 
 
 - name: Run createrepo in /var/www/html/pub/repos/
   command: createrepo /var/www/html/pub/repos/
 
-- name: Set selinux context
-  debug:
-    msg: selinux/var/www/html/pub/repos/
+- name:
+  sefcontext:
+    target: '/var/www/html/pub(/.*)?'
+    setype: httpd_sys_content_t
 
 - name: restorecon
-  debug:
-    msg: restorecon /var/www/html/pub/repos/
+  command: restorecon -Rvi /var/www/html/pub/repos/
