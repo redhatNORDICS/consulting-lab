@@ -12,13 +12,16 @@
     - libguestfs-xfs
     - git
     - python-lxml
-    - epel-release
+
+- name: install epel-release on CentOS
+  yum:
+    name: epel-release
+  when: ansible_distribution == 'CentOS'
 
 - name: disable firewalld
   yum:
     name: firewalld
     state: absent
-    
 
 - name: enable services
   service:
@@ -72,4 +75,3 @@
 - name: save iptables rules
   shell: iptables-save > /etc/sysconfig/iptables
   when: iptables_ssh.changed or iptables_response.changed or iptables_reject.changed or iptables_lo.changed
-                                                                                                                  
