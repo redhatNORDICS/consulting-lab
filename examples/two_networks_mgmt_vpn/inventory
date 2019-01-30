@@ -1,3 +1,4 @@
 # added labhost to /etc/hosts 
+[labhost]
 labhost
 
