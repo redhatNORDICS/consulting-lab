@@ -21,3 +21,4 @@ A repository containing resources used by consultants in their lab environments
 | subman                 |
 | users                  | creates local users                                            |
 | squid                  | install a squid proxy                                          |
+| vm-template            | creates an up-to-date rhel7.6 template image                   |
