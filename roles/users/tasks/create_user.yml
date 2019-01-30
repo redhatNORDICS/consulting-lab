@@ -10,6 +10,8 @@
     file:
       path: /etc/sudoers.d/users
       state: touch
+      modification_time: "preserve"
+      access_time: "preserve"
 
   - name: Add user to sudoers with NOPASSWD
     lineinfile:
@@ -23,7 +25,7 @@
     lineinfile:
       path: /etc/sudoers.d/users
       state: present
-      line: '{{ user.name }} ALL=(ALL) NOPASSWD: ALL'
+      line: '{{ user.name }} ALL=(ALL) ALL'
       validate: '/usr/sbin/visudo -cf %s'
     when: not user.nopasswd | default(true)
   when: user.sudo | default(true)
@@ -33,5 +35,5 @@
     user: "{{ user.name }}"
     key: "{{ user.public_key }}"
     state: present
-  when: user.public_key is defined 
+  when: user.public_key is defined
 
