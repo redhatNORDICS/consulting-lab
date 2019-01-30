@@ -1,4 +1,4 @@
-2 networks, 1 mgmt network, VPN
+2 networks, 1 mgmt network, VPN, VM template
 ===============================
 
 Run against a Hetzner host that has _either_ been put into Rescue/New installation mode or have been configured with a Centos7 image.
@@ -57,7 +57,6 @@ labhost ansible_host=12.13.14.15
 users:
 - name: me
   public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDVCzcQ24XJE9lW92mLNmOOXQXC8bDgaC7JmUKbv2kKh6+AIPnWuIXBuU+zVJrrgzmFT8eiqseOAB6jKNv0VcC1oq6vbeDoSBEaSlh2d+mbWIapYsVYW6zdxq6tzvgB3nuRniblDiGlU0Dne9XRSqKJrgHG+yrK34OhdRPChVZ7AEQhjtYImCCBQpUcz15VfTXkWSDj7TKIzxhm7LuhdhRaAuM74DaYBcZideWVHFlgSTyuEYGToUl4S2ddvD+qZwiY0NOXJzezgn1SBB1UZzSGdtbVtpnZ/iGd7AbV/QlmVSrL+lm9LqknPmMCOeBGaCbEYXVNDCHe0CpB+WNojV9Z me@workstation"
-
 ```
 
   
@@ -82,7 +81,6 @@ users:
     vars: 
       start_sync: true
 ```
-
 
 Run it! 
 

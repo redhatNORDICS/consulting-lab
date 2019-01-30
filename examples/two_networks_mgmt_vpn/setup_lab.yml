@@ -2,15 +2,26 @@
   user: root
   gather_facts: true
   roles:
+  - hetzner-provision
+  - hetzner-post-provision
   - role: mdadm-sync
     vars: 
       stop_sync: true 
   - users
   - openvpn
+  - subman
+  - role: reposync
+    vars:
+      phase: setup
   - libvirt
   - libvirt_network 
   - iptables
   - knockd
+  - squid
+  - role: reposync
+    vars:
+      phase: final
+  - vm-template
   - role: mdadm-sync
     vars: 
       start_sync: true 

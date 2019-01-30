@@ -1,14 +1,23 @@
 # This is the vars file that we use to provide the variables we want for ALL roles and configure and describe the whole lab environment.
+rh_username: consultant@redhat.com
+# ansible-vault encrypt_string
+rh_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32613461316639336634643264393864363830393966646234653363356563613961613531313365
+          3330646638636336353363623635616263383238346135620a623835356166633231353362326563
+          31393662626633376330343134346564366566303266353637333530623933613233363935373062
+          3164383133363832660a636561326538643036656231303131323465343732656261393134396132
+          3765
 
 # users role
 users:
-- name: moss
+- name: labuser
   public_key: "ssh-rsa <replaceme>"
 
 # libvirt
 libvirt_networks:
 - name: mgmt
-  type: nat_network_dhcp
+  type: open_network
   address: 10.0.0.0
   interface_address: 10.5.0.1
   netmask: 255.255.255.0
