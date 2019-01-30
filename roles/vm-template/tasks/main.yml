@@ -1,0 +1,82 @@
+---
+# Will create a Template out of a ISO and a kickstart file.
+
+- name: Set up template network
+  import_role:
+    name: libvirt_network
+  vars:
+    libvirt_networks:
+    - name: template
+      type: open_network
+      address: 172.199.199.0
+      interface_address: 172.199.199.1
+      netmask: 255.255.255.0
+      prefix: 24
+      dhcp_range_start: 172.199.199.50
+      dhcp_range_stop: 172.199.199.60
+
+- name: iptables temlate network
+  import_role:
+    name: iptables
+  vars:
+    libvirt_networks:
+    - name: template
+      type: open_network
+      address: 172.199.199.0
+      interface_address: 172.199.199.1
+      netmask: 255.255.255.0
+      prefix: 24
+      dhcp_range_start: 172.199.199.50
+      dhcp_range_stop: 172.199.199.60
+
+- name: download boot iso
+  import_role:
+    name: rhel-iso-download
+  vars:
+    image_dest_dir: "/var/lib/libvirt/images/isos/"
+    image_filename: rhel-server-7.6-x86_64-boot.iso
+
+
+- name: create template storage
+  file:
+    path: /var/lib/libvirt/images/templates/
+    state: directory
+
+
+- name: create qcow2 image
+  command: qemu-img create -f qcow2 /var/lib/libvirt/images/templates/template-{{ template_name }}.qcow2 20G
+
+- name: create kickstart
+  template:
+    src: rhel.ks
+    dest: /tmp/rhel.ks
+
+- name: run virt-install
+  command: 'virt-install --name template-{{ template_name }} --vcpu 2 --memory 2048 --disk /var/lib/libvirt/images/templates/template-{{ template_name }}.qcow2 --graphics spice,listen=127.0.0.1 --noautoconsole  --initrd-inject=/tmp/rhel.ks --extra-args "inst.ks=file:/rhel.ks inst.stage2=hd:LABEL=RHEL-7.6\x20Server.x86_64" --network network=template,model=virtio --location /var/lib/libvirt/images/isos/rhel-server-7.6-x86_64-boot.iso --os-variant linux --os-type rhel7'
+
+- name: wait for template installation to finish
+  command: virsh dominfo template-{{ template_name }} 
+  register: template_install
+  until: "'shut off' in template_install.stdout"
+  delay: 10
+  retries: 100
+
+
+- name: destroy libvirt_networks
+  virt_net:
+    command: destroy
+    name: "template"
+
+- name: undefined libvirt_networks
+  virt_net:
+    command: undefine
+    name: "template"
+
+- name: cleanup iptable rules
+  include_role:
+    name: iptables
+    tasks_from: delete-libvirt-network.yml
+  vars:
+    network:
+      name: template
+
