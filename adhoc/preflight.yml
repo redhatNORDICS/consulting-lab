@@ -1,0 +1,7 @@
+- hosts: labhost
+  user: root
+  tasks:
+  - import_role:
+      name: precheck
+  - import_role:
+      name: users

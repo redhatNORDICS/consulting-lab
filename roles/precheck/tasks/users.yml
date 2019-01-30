@@ -1,0 +1,4 @@
+- name: "check that var users: is defined"
+  assert:
+    that: 
+    - 'users is defined'

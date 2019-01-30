@@ -1,0 +1,7 @@
+- name: "check that libvirt_networks: is defined"
+  assert:
+    that:
+    - "libvirt_networks is defined"
+
+
+# TODO: sanity check the dict

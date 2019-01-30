@@ -1,0 +1,17 @@
+---
+# This will pick out every role one by one and include a separate tasklist depending on the role
+#
+
+# If the playbook consist of
+
+# users
+- include_tasks: users.yml
+  when: "'users' in role_names"
+
+# subman
+- include_tasks: subman.yml
+  when: "'subman' in role_names"
+
+# libvirt_networks
+- include_tasks: libvirt_networks.yml
+  when: "'libvirt_networks' in role_names"

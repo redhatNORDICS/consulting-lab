@@ -1,0 +1,5 @@
+- name: check that rh_username and rh_password is defined
+  assert:
+    that:
+    - "rh_username is defined"
+    - "rh_password is defined"
