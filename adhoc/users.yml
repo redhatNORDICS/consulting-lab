@@ -1,0 +1,14 @@
+- hosts: labhost
+  become: true
+  roles:
+  - role: users
+    vars:
+      users:
+      - name: rhconsultant1
+        sudo: true
+        nopasswd: true
+        public_key: "ssh-rsa A4AAT3NzaC1yc2EAAAA..."
+      
+      - name: rhconsultant2
+        public_key: "ssh-rsa A4AAT3NzaC1yc2EAAAA..."
+        nopasswd: false
