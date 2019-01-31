@@ -1,8 +1,9 @@
 [rhel-7-server-rpms]
-sslclientcert = {{ cert }}
-sslclientkey = {{ key }}
+name = rhel-7-server-rpms
+sslclientcert = {{ cdn_certs[0] }}
+sslclientkey = {{ cdn_keys[0] }}
 baseurl = https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/os/
-enabled = 0
+enabled = 1
 gpgcheck = 0
-ssl_verify = 0
+sslverify = 0
 sslcacert = /etc/rhsm/ca/redhat-uep.pem
