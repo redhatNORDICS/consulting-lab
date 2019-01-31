@@ -20,13 +20,20 @@
   set_fact:
     cdn_keys: "{{ cdn_keys.stdout_lines }}"
 
+
+- name: ensure the destination directory exists
+  file:
+    path: "{{ image_dest_dir }}"
+    state: directory
+    mode: 0755
+
 - name: download ISO (might take a while)
   get_url:
     url: https://cdn.redhat.com/content/dist/rhel/server/7/7Server/x86_64/iso/{{ image_filename }}
     client_cert: "{{ cdn_certs[0] }}"
     client_key: "{{ cdn_keys[0] }}"
     dest: "{{ image_dest_dir }}/{{ image_filename }}"
-    mode: 755
+    mode: 0755
     validate_certs: false
   when: not rhel_iso_async  | default(false)
 
@@ -36,7 +43,7 @@
     client_cert: "{{ cdn_certs[0] }}"
     client_key: "{{ cdn_keys[0] }}"
     dest: "{{ image_dest_dir }}/{{ image_filename }}"
-    mode: 755
+    mode: 0755
   register: image_download_sleeper
   async: 5
   poll: 0

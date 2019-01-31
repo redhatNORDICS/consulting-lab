@@ -1,8 +1,8 @@
 ---
 - assert:
     that:
-      - "'rh_username' is defined"
-      - "'rh_password' is defined"
+      - "rh_username is defined"
+      - "rh_password is defined"
 
 - name: ensure subscription-manager is installed
   yum:
