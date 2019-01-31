@@ -1,6 +1,9 @@
 ---
 # tasks file for hetzner-post-provision
 
+- name: gather new facts after provision
+  setup:
+
 - name: update all packages
   yum:
     name: "*"
