@@ -9,15 +9,14 @@
       stop_sync: true 
   - users
   - openvpn
+  - libvirt
   - subman
   - role: reposync
     vars:
       phase: setup
-  - libvirt
   - libvirt_network 
   - iptables
   - knockd
-  - squid
   - role: reposync
     vars:
       phase: final
