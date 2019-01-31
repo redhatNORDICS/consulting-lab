@@ -1,0 +1,1092 @@
+2019-01-31
+Total runtime:  0:54:58
+
+
+- hosts: labhost
+  user: root
+  gather_facts: true
+  roles:
+  - hetzner-provision
+  - hetzner-post-provision
+  - role: mdadm-sync
+    vars: 
+      stop_sync: true
+  - users
+  - openvpn
+  - libvirt
+  - subman
+  - role: reposync
+    vars:
+      phase: setup
+  - libvirt_network
+  - iptables
+  - knockd
+  - role: reposync
+    vars:
+      phase: final
+  - vm-template
+  - role: mdadm-sync
+    vars: 
+      start_sync: true
+
+
+ [WARNING]: Found both group and host with same name: labhost
+
+PLAY [labhost] *****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+Thursday 31 January 2019  16:17:26 +0100 (0:00:00.087)       0:00:00.087 ****** 
+ok: [labhost]
+
+TASK [hetzner-provision : copy configuration file] *****************************
+Thursday 31 January 2019  16:17:30 +0100 (0:00:04.051)       0:00:04.139 ****** 
+changed: [labhost]
+
+TASK [hetzner-provision : override configuration file] *************************
+Thursday 31 January 2019  16:17:32 +0100 (0:00:01.574)       0:00:05.714 ****** 
+skipping: [labhost]
+
+TASK [hetzner-provision : command] *********************************************
+Thursday 31 January 2019  16:17:32 +0100 (0:00:00.059)       0:00:05.773 ****** 
+changed: [labhost]
+
+TASK [hetzner-provision : debug] ***********************************************
+Thursday 31 January 2019  16:17:32 +0100 (0:00:00.449)       0:00:06.222 ****** 
+ok: [labhost] => {
+    "msg": {
+        "changed": true, 
+        "cmd": [
+            "file", 
+            "/root/hetzner.config"
+        ], 
+        "delta": "0:00:00.062386", 
+        "end": "2019-01-31 16:17:32.693799", 
+        "failed": false, 
+        "rc": 0, 
+        "start": "2019-01-31 16:17:32.631413", 
+        "stderr": "", 
+        "stderr_lines": [], 
+        "stdout": "/root/hetzner.config: ASCII text", 
+        "stdout_lines": [
+            "/root/hetzner.config: ASCII text"
+        ]
+    }
+}
+
+TASK [hetzner-provision : run the setup (long running task. approx 5min)] ******
+Thursday 31 January 2019  16:17:32 +0100 (0:00:00.088)       0:00:06.311 ****** 
+changed: [labhost]
+
+TASK [reboot : Reboot system] **************************************************
+Thursday 31 January 2019  16:19:53 +0100 (0:02:20.292)       0:02:26.603 ****** 
+changed: [labhost]
+
+TASK [reboot : Wait for the {{ ansible_host }} to finish rebooting] ************
+Thursday 31 January 2019  16:19:55 +0100 (0:00:02.552)       0:02:29.156 ****** 
+ok: [labhost]
+
+TASK [reboot : Wait for the {{ ansible_host }} to finish rebooting] ************
+Thursday 31 January 2019  16:21:42 +0100 (0:01:46.462)       0:04:15.619 ****** 
+skipping: [labhost]
+
+TASK [hetzner-provision : We are done rebooting] *******************************
+Thursday 31 January 2019  16:21:42 +0100 (0:00:00.064)       0:04:15.684 ****** 
+changed: [labhost]
+
+TASK [hetzner-post-provision : gather new facts after provision] ***************
+Thursday 31 January 2019  16:21:42 +0100 (0:00:00.413)       0:04:16.097 ****** 
+ok: [labhost]
+
+TASK [hetzner-post-provision : update all packages] ****************************
+Thursday 31 January 2019  16:21:43 +0100 (0:00:00.979)       0:04:17.077 ****** 
+changed: [labhost]
+
+TASK [hetzner-post-provision : install packages] *******************************
+Thursday 31 January 2019  16:22:35 +0100 (0:00:51.829)       0:05:08.906 ****** 
+changed: [labhost]
+
+TASK [hetzner-post-provision : configure nested virtualization] ****************
+Thursday 31 January 2019  16:26:53 +0100 (0:04:18.260)       0:09:27.166 ****** 
+changed: [labhost]
+
+TASK [hetzner-post-provision : make sure selinux is enabled] *******************
+Thursday 31 January 2019  16:26:55 +0100 (0:00:01.618)       0:09:28.785 ****** 
+changed: [labhost]
+
+TASK [hetzner-post-provision : set autorelabel for next reboot] ****************
+Thursday 31 January 2019  16:26:55 +0100 (0:00:00.506)       0:09:29.291 ****** 
+changed: [labhost]
+
+TASK [reboot : Reboot system] **************************************************
+Thursday 31 January 2019  16:26:56 +0100 (0:00:00.552)       0:09:29.843 ****** 
+changed: [labhost]
+
+TASK [reboot : Wait for the {{ ansible_host }} to finish rebooting] ************
+Thursday 31 January 2019  16:26:58 +0100 (0:00:02.530)       0:09:32.374 ****** 
+ok: [labhost]
+
+TASK [reboot : Wait for the {{ ansible_host }} to finish rebooting] ************
+Thursday 31 January 2019  16:30:53 +0100 (0:03:54.319)       0:13:26.694 ****** 
+skipping: [labhost]
+
+TASK [mdadm-sync : start the mdadm sync (max)] *********************************
+Thursday 31 January 2019  16:30:53 +0100 (0:00:00.055)       0:13:26.750 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : start the mdadm sync (min)] *********************************
+Thursday 31 January 2019  16:30:53 +0100 (0:00:00.336)       0:13:27.086 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : temporarily pause the mdadm sync (max)] *********************
+Thursday 31 January 2019  16:30:53 +0100 (0:00:00.313)       0:13:27.399 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : temporarily pause the mdadm sync (min)] *********************
+Thursday 31 January 2019  16:30:54 +0100 (0:00:00.294)       0:13:27.693 ****** 
+changed: [labhost]
+
+TASK [users : Create users] ****************************************************
+Thursday 31 January 2019  16:30:54 +0100 (0:00:00.342)       0:13:28.036 ****** 
+included: /home/moss/infohub/consulting-lab/roles/users/tasks/create_user.yml for labhost
+
+TASK [users : Create user] *****************************************************
+Thursday 31 January 2019  16:30:54 +0100 (0:00:00.101)       0:13:28.138 ****** 
+changed: [labhost]
+
+TASK [users : touch /etc/sudoers.d/users] **************************************
+Thursday 31 January 2019  16:30:55 +0100 (0:00:00.981)       0:13:29.119 ****** 
+changed: [labhost]
+
+TASK [users : Add user to sudoers with NOPASSWD] *******************************
+Thursday 31 January 2019  16:30:56 +0100 (0:00:00.391)       0:13:29.511 ****** 
+changed: [labhost]
+
+TASK [users : Add user to sudoers using password] ******************************
+Thursday 31 January 2019  16:30:56 +0100 (0:00:00.394)       0:13:29.905 ****** 
+skipping: [labhost]
+
+TASK [users : add public key to authorized_keys] *******************************
+Thursday 31 January 2019  16:30:56 +0100 (0:00:00.057)       0:13:29.963 ****** 
+changed: [labhost]
+
+TASK [openvpn : install openvpn] ***********************************************
+Thursday 31 January 2019  16:30:57 +0100 (0:00:00.852)       0:13:30.815 ****** 
+changed: [labhost]
+
+TASK [openvpn : check for static key] ******************************************
+Thursday 31 January 2019  16:32:06 +0100 (0:01:09.057)       0:14:39.873 ****** 
+ok: [labhost]
+
+TASK [openvpn : generate static openvpn key] ***********************************
+Thursday 31 January 2019  16:32:06 +0100 (0:00:00.406)       0:14:40.279 ****** 
+changed: [labhost]
+
+TASK [openvpn : create configdir] **********************************************
+Thursday 31 January 2019  16:32:07 +0100 (0:00:00.360)       0:14:40.639 ****** 
+ok: [labhost -> localhost]
+
+TASK [openvpn : configure openvpn server] **************************************
+Thursday 31 January 2019  16:32:07 +0100 (0:00:00.162)       0:14:40.802 ****** 
+changed: [labhost]
+
+TASK [openvpn : configure client] **********************************************
+Thursday 31 January 2019  16:32:08 +0100 (0:00:01.452)       0:14:42.254 ****** 
+ok: [labhost -> localhost]
+
+TASK [openvpn : fetch static key] **********************************************
+Thursday 31 January 2019  16:32:09 +0100 (0:00:00.300)       0:14:42.555 ****** 
+changed: [labhost]
+
+TASK [openvpn : open openvpn port] *********************************************
+Thursday 31 January 2019  16:32:09 +0100 (0:00:00.854)       0:14:43.410 ****** 
+changed: [labhost]
+
+TASK [openvpn : allow forward from VPN tun0 net to any network] ****************
+Thursday 31 January 2019  16:32:10 +0100 (0:00:00.583)       0:14:43.993 ****** 
+changed: [labhost]
+
+TASK [openvpn : allow INPUT to tun0] *******************************************
+Thursday 31 January 2019  16:32:10 +0100 (0:00:00.354)       0:14:44.347 ****** 
+changed: [labhost]
+
+TASK [openvpn : save iptables rules] *******************************************
+Thursday 31 January 2019  16:32:11 +0100 (0:00:00.342)       0:14:44.689 ****** 
+changed: [labhost]
+
+TASK [openvpn : restart openvpn server] ****************************************
+Thursday 31 January 2019  16:32:12 +0100 (0:00:00.771)       0:14:45.461 ****** 
+changed: [labhost]
+
+TASK [openvpn : enable openvpn server] *****************************************
+Thursday 31 January 2019  16:32:12 +0100 (0:00:00.751)       0:14:46.213 ****** 
+ok: [labhost]
+
+TASK [libvirt : install packages] **********************************************
+Thursday 31 January 2019  16:32:13 +0100 (0:00:00.390)       0:14:46.604 ****** 
+ok: [labhost]
+
+TASK [libvirt : install epel-release on CentOS] ********************************
+Thursday 31 January 2019  16:32:14 +0100 (0:00:00.859)       0:14:47.463 ****** 
+ok: [labhost]
+
+TASK [libvirt : disable firewalld] *********************************************
+Thursday 31 January 2019  16:32:14 +0100 (0:00:00.578)       0:14:48.041 ****** 
+changed: [labhost]
+
+TASK [libvirt : enable services] ***********************************************
+Thursday 31 January 2019  16:32:18 +0100 (0:00:03.863)       0:14:51.905 ****** 
+ok: [labhost] => (item=libvirtd)
+changed: [labhost] => (item=iptables)
+
+TASK [libvirt : clone virt-install-wrapper] ************************************
+Thursday 31 January 2019  16:32:19 +0100 (0:00:01.391)       0:14:53.297 ****** 
+changed: [labhost]
+
+TASK [libvirt : allow ssh] *****************************************************
+Thursday 31 January 2019  16:32:21 +0100 (0:00:01.904)       0:14:55.201 ****** 
+changed: [labhost]
+
+TASK [libvirt : allow lo] ******************************************************
+Thursday 31 January 2019  16:32:22 +0100 (0:00:00.459)       0:14:55.661 ****** 
+ok: [labhost]
+
+TASK [libvirt : allow response traffic] ****************************************
+Thursday 31 January 2019  16:32:22 +0100 (0:00:00.344)       0:14:56.006 ****** 
+changed: [labhost]
+
+TASK [libvirt : drop stuff] ****************************************************
+Thursday 31 January 2019  16:32:22 +0100 (0:00:00.390)       0:14:56.396 ****** 
+changed: [labhost]
+
+TASK [libvirt : save iptables rules] *******************************************
+Thursday 31 January 2019  16:32:23 +0100 (0:00:00.378)       0:14:56.775 ****** 
+changed: [labhost]
+
+TASK [subman : assert] *********************************************************
+Thursday 31 January 2019  16:32:23 +0100 (0:00:00.394)       0:14:57.169 ****** 
+ok: [labhost] => {
+    "changed": false, 
+    "msg": "All assertions passed"
+}
+
+TASK [subman : ensure subscription-manager is installed] ***********************
+Thursday 31 January 2019  16:32:23 +0100 (0:00:00.102)       0:14:57.271 ****** 
+changed: [labhost]
+
+TASK [subman : (CentOS) turn off SSL verify] ***********************************
+Thursday 31 January 2019  16:32:28 +0100 (0:00:05.079)       0:15:02.351 ****** 
+changed: [labhost]
+
+TASK [subman : check subscription status] **************************************
+Thursday 31 January 2019  16:32:29 +0100 (0:00:00.411)       0:15:02.762 ****** 
+changed: [labhost]
+
+TASK [subman : register] *******************************************************
+Thursday 31 January 2019  16:32:31 +0100 (0:00:02.122)       0:15:04.885 ****** 
+changed: [labhost]
+
+TASK [subman : get pool] *******************************************************
+Thursday 31 January 2019  16:32:45 +0100 (0:00:14.393)       0:15:19.278 ****** 
+changed: [labhost]
+
+TASK [subman : attach] *********************************************************
+Thursday 31 January 2019  16:32:50 +0100 (0:00:04.356)       0:15:23.635 ****** 
+changed: [labhost]
+
+TASK [reposync : check for phase] **********************************************
+Thursday 31 January 2019  16:33:03 +0100 (0:00:13.241)       0:15:36.877 ****** 
+ok: [labhost] => {
+    "changed": false, 
+    "msg": "All assertions passed"
+}
+
+TASK [reposync : 1st phase: Setup] *********************************************
+Thursday 31 January 2019  16:33:03 +0100 (0:00:00.102)       0:15:36.980 ****** 
+included: /home/moss/infohub/consulting-lab/roles/reposync/tasks/setup.yml for labhost
+
+TASK [reposync : install packages] *********************************************
+Thursday 31 January 2019  16:33:03 +0100 (0:00:00.091)       0:15:37.072 ****** 
+changed: [labhost]
+
+TASK [reposync : create pub directory for repos] *******************************
+Thursday 31 January 2019  16:33:37 +0100 (0:00:34.036)       0:16:11.108 ****** 
+changed: [labhost]
+
+TASK [reposync : remove welcome.conf] ******************************************
+Thursday 31 January 2019  16:33:38 +0100 (0:00:00.446)       0:16:11.555 ****** 
+changed: [labhost]
+
+TASK [reposync : remove userdir.conf] ******************************************
+Thursday 31 January 2019  16:33:38 +0100 (0:00:00.368)       0:16:11.924 ****** 
+changed: [labhost]
+
+TASK [reposync : create repos vhost] *******************************************
+Thursday 31 January 2019  16:33:38 +0100 (0:00:00.355)       0:16:12.279 ****** 
+changed: [labhost]
+
+TASK [reposync : enable httpd] *************************************************
+Thursday 31 January 2019  16:33:40 +0100 (0:00:01.448)       0:16:13.728 ****** 
+changed: [labhost]
+
+TASK [reposync : enable 7Server] ***********************************************
+Thursday 31 January 2019  16:33:40 +0100 (0:00:00.528)       0:16:14.256 ****** 
+skipping: [labhost]
+
+TASK [reposync : enable rhel-7-server-rpms] ************************************
+Thursday 31 January 2019  16:33:40 +0100 (0:00:00.047)       0:16:14.304 ****** 
+skipping: [labhost]
+
+TASK [reposync : CentOS workaround] ********************************************
+Thursday 31 January 2019  16:33:40 +0100 (0:00:00.046)       0:16:14.350 ****** 
+included: /home/moss/infohub/consulting-lab/roles/reposync/tasks/centos-repo.yml for labhost
+
+TASK [reposync : get certs] ****************************************************
+Thursday 31 January 2019  16:33:40 +0100 (0:00:00.088)       0:16:14.438 ****** 
+changed: [labhost]
+
+TASK [reposync : set_fact certs] ***********************************************
+Thursday 31 January 2019  16:33:41 +0100 (0:00:00.414)       0:16:14.853 ****** 
+ok: [labhost]
+
+TASK [reposync : get keys] *****************************************************
+Thursday 31 January 2019  16:33:41 +0100 (0:00:00.068)       0:16:14.922 ****** 
+changed: [labhost]
+
+TASK [reposync : set_fact] *****************************************************
+Thursday 31 January 2019  16:33:41 +0100 (0:00:00.345)       0:16:15.268 ****** 
+ok: [labhost]
+
+TASK [reposync : (CentOS) configure rhel-7-server-rpms repo] *******************
+Thursday 31 January 2019  16:33:41 +0100 (0:00:00.069)       0:16:15.337 ****** 
+changed: [labhost]
+
+TASK [reposync : start reposync] ***********************************************
+Thursday 31 January 2019  16:33:43 +0100 (0:00:01.417)       0:16:16.755 ****** 
+changed: [labhost]
+
+TASK [reposync : (CentOS) disable rhel-7-server-rpms repo] *********************
+Thursday 31 January 2019  16:33:45 +0100 (0:00:02.417)       0:16:19.172 ****** 
+changed: [labhost]
+
+TASK [reposync : 2nd phase: Final] *********************************************
+Thursday 31 January 2019  16:33:46 +0100 (0:00:00.406)       0:16:19.579 ****** 
+skipping: [labhost]
+
+TASK [libvirt_network : define networks] ***************************************
+Thursday 31 January 2019  16:33:46 +0100 (0:00:00.047)       0:16:19.627 ****** 
+included: /home/moss/infohub/consulting-lab/roles/libvirt_network/tasks/define_network.yml for labhost
+included: /home/moss/infohub/consulting-lab/roles/libvirt_network/tasks/define_network.yml for labhost
+included: /home/moss/infohub/consulting-lab/roles/libvirt_network/tasks/define_network.yml for labhost
+
+TASK [libvirt_network : Defining network mgmt] *********************************
+Thursday 31 January 2019  16:33:46 +0100 (0:00:00.105)       0:16:19.733 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : Enable and Autostart virtual network mgmt] *************
+Thursday 31 January 2019  16:33:47 +0100 (0:00:00.730)       0:16:20.463 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : allow forward to vpn network] **************************
+Thursday 31 January 2019  16:33:47 +0100 (0:00:00.474)       0:16:20.937 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : Defining network net1] *********************************
+Thursday 31 January 2019  16:33:47 +0100 (0:00:00.387)       0:16:21.325 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : Enable and Autostart virtual network net1] *************
+Thursday 31 January 2019  16:33:48 +0100 (0:00:00.397)       0:16:21.723 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : allow forward to vpn network] **************************
+Thursday 31 January 2019  16:33:48 +0100 (0:00:00.432)       0:16:22.155 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : Defining network net2] *********************************
+Thursday 31 January 2019  16:33:49 +0100 (0:00:00.380)       0:16:22.536 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : Enable and Autostart virtual network net2] *************
+Thursday 31 January 2019  16:33:49 +0100 (0:00:00.434)       0:16:22.971 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : allow forward to vpn network] **************************
+Thursday 31 January 2019  16:33:50 +0100 (0:00:00.491)       0:16:23.462 ****** 
+changed: [labhost]
+
+TASK [iptables : Allow all related and established connection on FORWARD] ******
+Thursday 31 January 2019  16:33:50 +0100 (0:00:00.385)       0:16:23.848 ****** 
+ok: [labhost]
+
+TASK [iptables : Set default policy on FORWARD to DROP] ************************
+Thursday 31 January 2019  16:33:50 +0100 (0:00:00.340)       0:16:24.189 ****** 
+changed: [labhost]
+
+TASK [iptables : Configure rules for all libvirt_networks] *********************
+Thursday 31 January 2019  16:33:52 +0100 (0:00:01.341)       0:16:25.530 ****** 
+included: /home/moss/infohub/consulting-lab/roles/iptables/tasks/libvirt-network.yml for labhost
+included: /home/moss/infohub/consulting-lab/roles/iptables/tasks/libvirt-network.yml for labhost
+included: /home/moss/infohub/consulting-lab/roles/iptables/tasks/libvirt-network.yml for labhost
+
+TASK [iptables : create a list of all networks except mgmt] ********************
+Thursday 31 January 2019  16:33:52 +0100 (0:00:00.129)       0:16:25.660 ****** 
+ok: [labhost]
+
+TASK [iptables : add networks to list except mgmt] *****************************
+Thursday 31 January 2019  16:33:52 +0100 (0:00:00.072)       0:16:25.733 ****** 
+ [WARNING]: when statements should not include jinja2 templating delimiters
+such as {{ }} or {% %}. Found: '{{ network.name }}' not in item.name
+skipping: [labhost] => (item={u'name': u'mgmt', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.5.0.1', u'dhcp_range_start': u'10.5.0.100', u'dhcp_range_stop': u'10.5.0.254', u'address': u'10.0.0.0', u'netmask': u'255.255.255.0'}) 
+ok: [labhost] => (item={u'name': u'net1', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.101.0.1', u'dhcp_range_start': u'10.101.0.2', u'dhcp_range_stop': u'10.101.0.254', u'address': u'10.101.0.0', u'netmask': u'255.255.255.0'})
+ok: [labhost] => (item={u'name': u'net2', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.102.0.1', u'dhcp_range_start': u'10.102.0.2', u'dhcp_range_stop': u'10.102.0.254', u'address': u'10.102.0.0', u'netmask': u'255.255.255.0'})
+
+TASK [iptables : print list] ***************************************************
+Thursday 31 January 2019  16:33:52 +0100 (0:00:00.103)       0:16:25.836 ****** 
+ok: [labhost] => {
+    "msg": [
+        "net1", 
+        "net2"
+    ]
+}
+
+TASK [iptables : create the chains to mgmt] ************************************
+Thursday 31 January 2019  16:33:52 +0100 (0:00:00.070)       0:16:25.907 ****** 
+changed: [labhost] => (item=net1)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Allow inter-lan traffic on the network] ***********************
+Thursday 31 January 2019  16:33:53 +0100 (0:00:00.684)       0:16:26.591 ****** 
+changed: [labhost]
+
+TASK [iptables : Create FORWARD rule to chain mgmt] ****************************
+Thursday 31 January 2019  16:33:53 +0100 (0:00:00.353)       0:16:26.945 ****** 
+changed: [labhost] => (item=net1)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Add DROP log rule to each -to-mgmt chain] *********************
+Thursday 31 January 2019  16:33:54 +0100 (0:00:00.641)       0:16:27.586 ****** 
+changed: [labhost] => (item=net1)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Allow all INPUT to network mgmt] ******************************
+Thursday 31 January 2019  16:33:54 +0100 (0:00:00.745)       0:16:28.331 ****** 
+changed: [labhost]
+
+TASK [iptables : create a list of all networks except net1] ********************
+Thursday 31 January 2019  16:33:55 +0100 (0:00:00.351)       0:16:28.682 ****** 
+ok: [labhost]
+
+TASK [iptables : add networks to list except net1] *****************************
+Thursday 31 January 2019  16:33:55 +0100 (0:00:00.075)       0:16:28.757 ****** 
+ [WARNING]: when statements should not include jinja2 templating delimiters
+such as {{ }} or {% %}. Found: '{{ network.name }}' not in item.name
+ok: [labhost] => (item={u'name': u'mgmt', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.5.0.1', u'dhcp_range_start': u'10.5.0.100', u'dhcp_range_stop': u'10.5.0.254', u'address': u'10.0.0.0', u'netmask': u'255.255.255.0'})
+skipping: [labhost] => (item={u'name': u'net1', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.101.0.1', u'dhcp_range_start': u'10.101.0.2', u'dhcp_range_stop': u'10.101.0.254', u'address': u'10.101.0.0', u'netmask': u'255.255.255.0'}) 
+ok: [labhost] => (item={u'name': u'net2', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.102.0.1', u'dhcp_range_start': u'10.102.0.2', u'dhcp_range_stop': u'10.102.0.254', u'address': u'10.102.0.0', u'netmask': u'255.255.255.0'})
+
+TASK [iptables : print list] ***************************************************
+Thursday 31 January 2019  16:33:55 +0100 (0:00:00.104)       0:16:28.862 ****** 
+ok: [labhost] => {
+    "msg": [
+        "mgmt", 
+        "net2"
+    ]
+}
+
+TASK [iptables : create the chains to net1] ************************************
+Thursday 31 January 2019  16:33:55 +0100 (0:00:00.070)       0:16:28.933 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Allow inter-lan traffic on the network] ***********************
+Thursday 31 January 2019  16:33:56 +0100 (0:00:00.617)       0:16:29.550 ****** 
+changed: [labhost]
+
+TASK [iptables : Create FORWARD rule to chain net1] ****************************
+Thursday 31 January 2019  16:33:56 +0100 (0:00:00.341)       0:16:29.891 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Add DROP log rule to each -to-net1 chain] *********************
+Thursday 31 January 2019  16:33:57 +0100 (0:00:00.646)       0:16:30.537 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Allow all INPUT to network net1] ******************************
+Thursday 31 January 2019  16:33:57 +0100 (0:00:00.637)       0:16:31.174 ****** 
+changed: [labhost]
+
+TASK [iptables : create a list of all networks except net2] ********************
+Thursday 31 January 2019  16:33:58 +0100 (0:00:00.350)       0:16:31.525 ****** 
+ok: [labhost]
+
+TASK [iptables : add networks to list except net2] *****************************
+Thursday 31 January 2019  16:33:58 +0100 (0:00:00.069)       0:16:31.595 ****** 
+ [WARNING]: when statements should not include jinja2 templating delimiters
+such as {{ }} or {% %}. Found: '{{ network.name }}' not in item.name
+ok: [labhost] => (item={u'name': u'mgmt', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.5.0.1', u'dhcp_range_start': u'10.5.0.100', u'dhcp_range_stop': u'10.5.0.254', u'address': u'10.0.0.0', u'netmask': u'255.255.255.0'})
+ok: [labhost] => (item={u'name': u'net1', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.101.0.1', u'dhcp_range_start': u'10.101.0.2', u'dhcp_range_stop': u'10.101.0.254', u'address': u'10.101.0.0', u'netmask': u'255.255.255.0'})
+skipping: [labhost] => (item={u'name': u'net2', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.102.0.1', u'dhcp_range_start': u'10.102.0.2', u'dhcp_range_stop': u'10.102.0.254', u'address': u'10.102.0.0', u'netmask': u'255.255.255.0'}) 
+
+TASK [iptables : print list] ***************************************************
+Thursday 31 January 2019  16:33:58 +0100 (0:00:00.138)       0:16:31.734 ****** 
+ok: [labhost] => {
+    "msg": [
+        "mgmt", 
+        "net1"
+    ]
+}
+
+TASK [iptables : create the chains to net2] ************************************
+Thursday 31 January 2019  16:33:58 +0100 (0:00:00.105)       0:16:31.840 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net1)
+
+TASK [iptables : Allow inter-lan traffic on the network] ***********************
+Thursday 31 January 2019  16:33:59 +0100 (0:00:00.672)       0:16:32.513 ****** 
+changed: [labhost]
+
+TASK [iptables : Create FORWARD rule to chain net2] ****************************
+Thursday 31 January 2019  16:33:59 +0100 (0:00:00.385)       0:16:32.898 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net1)
+
+TASK [iptables : Add DROP log rule to each -to-net2 chain] *********************
+Thursday 31 January 2019  16:34:00 +0100 (0:00:00.631)       0:16:33.529 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net1)
+
+TASK [iptables : Allow all INPUT to network net2] ******************************
+Thursday 31 January 2019  16:34:00 +0100 (0:00:00.702)       0:16:34.232 ****** 
+changed: [labhost]
+
+TASK [iptables : Save rules] ***************************************************
+Thursday 31 January 2019  16:34:01 +0100 (0:00:00.377)       0:16:34.610 ****** 
+changed: [labhost]
+
+TASK [knockd : check if installed] *********************************************
+Thursday 31 January 2019  16:34:01 +0100 (0:00:00.407)       0:16:35.017 ****** 
+ [WARNING]: Consider using the yum, dnf or zypper module rather than running
+rpm.  If you need to use command because yum, dnf or zypper is insufficient you
+can add warn=False to this command task or set command_warnings=False in
+ansible.cfg to get rid of this message.
+fatal: [labhost]: FAILED! => {"changed": true, "cmd": ["rpm", "-q", "knock-server"], "delta": "0:00:00.072444", "end": "2019-01-31 16:34:01.880827", "msg": "non-zero return code", "rc": 1, "start": "2019-01-31 16:34:01.808383", "stderr": "", "stderr_lines": [], "stdout": "package knock-server is not installed", "stdout_lines": ["package knock-server is not installed"]}
+...ignoring
+
+TASK [knockd : download SRPM] **************************************************
+Thursday 31 January 2019  16:34:01 +0100 (0:00:00.379)       0:16:35.396 ****** 
+changed: [labhost]
+
+TASK [knockd : debug] **********************************************************
+Thursday 31 January 2019  16:34:03 +0100 (0:00:01.195)       0:16:36.592 ****** 
+ok: [labhost] => {
+    "msg": "CentOS"
+}
+
+TASK [knockd : RHEL7 enable optional repo] *************************************
+Thursday 31 January 2019  16:34:03 +0100 (0:00:00.103)       0:16:36.696 ****** 
+skipping: [labhost]
+
+TASK [knockd : install deps] ***************************************************
+Thursday 31 January 2019  16:34:03 +0100 (0:00:00.049)       0:16:36.745 ****** 
+[DEPRECATION WARNING]: Invoking "yum" only once while using a loop via 
+squash_actions is deprecated. Instead of using a loop to supply multiple items 
+and specifying `name: {{ item }}`, please use `name: [u'libpcap-devel', u'gcc',
+ u'rpm-build']` and remove the loop. This feature will be removed in version 
+2.11. Deprecation warnings can be disabled by setting 
+deprecation_warnings=False in ansible.cfg.
+changed: [labhost] => (item=[u'libpcap-devel', u'gcc', u'rpm-build'])
+
+TASK [knockd : build from SRPM] ************************************************
+Thursday 31 January 2019  16:34:36 +0100 (0:00:32.775)       0:17:09.521 ****** 
+changed: [labhost]
+
+TASK [knockd : install knockd server (CentOS)] *********************************
+Thursday 31 January 2019  16:34:40 +0100 (0:00:04.260)       0:17:13.781 ****** 
+changed: [labhost]
+
+TASK [knockd : install knockd server (RedHat)] *********************************
+Thursday 31 January 2019  16:34:48 +0100 (0:00:08.517)       0:17:22.298 ****** 
+skipping: [labhost]
+
+TASK [knockd : set knockd.conf] ************************************************
+Thursday 31 January 2019  16:34:48 +0100 (0:00:00.049)       0:17:22.348 ****** 
+changed: [labhost]
+
+TASK [knockd : ensure knockd is running] ***************************************
+Thursday 31 January 2019  16:34:50 +0100 (0:00:01.561)       0:17:23.910 ****** 
+changed: [labhost]
+
+TASK [reposync : check for phase] **********************************************
+Thursday 31 January 2019  16:34:51 +0100 (0:00:00.581)       0:17:24.491 ****** 
+ok: [labhost] => {
+    "changed": false, 
+    "msg": "All assertions passed"
+}
+
+TASK [reposync : 1st phase: Setup] *********************************************
+Thursday 31 January 2019  16:34:51 +0100 (0:00:00.103)       0:17:24.594 ****** 
+skipping: [labhost]
+
+TASK [reposync : 2nd phase: Final] *********************************************
+Thursday 31 January 2019  16:34:51 +0100 (0:00:00.046)       0:17:24.641 ****** 
+included: /home/moss/infohub/consulting-lab/roles/reposync/tasks/final.yml for labhost
+
+TASK [reposync : Wait for the reposync job to finish] **************************
+Thursday 31 January 2019  16:34:51 +0100 (0:00:00.087)       0:17:24.729 ****** 
+FAILED - RETRYING: Wait for the reposync job to finish (300 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (299 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (298 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (297 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (296 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (295 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (294 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (293 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (292 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (291 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (290 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (289 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (288 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (287 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (286 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (285 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (284 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (283 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (282 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (281 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (280 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (279 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (278 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (277 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (276 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (275 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (274 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (273 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (272 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (271 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (270 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (269 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (268 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (267 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (266 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (265 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (264 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (263 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (262 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (261 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (260 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (259 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (258 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (257 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (256 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (255 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (254 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (253 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (252 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (251 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (250 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (249 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (248 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (247 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (246 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (245 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (244 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (243 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (242 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (241 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (240 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (239 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (238 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (237 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (236 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (235 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (234 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (233 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (232 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (231 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (230 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (229 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (228 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (227 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (226 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (225 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (224 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (223 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (222 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (221 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (220 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (219 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (218 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (217 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (216 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (215 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (214 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (213 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (212 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (211 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (210 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (209 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (208 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (207 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (206 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (205 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (204 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (203 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (202 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (201 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (200 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (199 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (198 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (197 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (196 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (195 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (194 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (193 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (192 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (191 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (190 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (189 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (188 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (187 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (186 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (185 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (184 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (183 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (182 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (181 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (180 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (179 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (178 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (177 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (176 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (175 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (174 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (173 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (172 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (171 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (170 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (169 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (168 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (167 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (166 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (165 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (164 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (163 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (162 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (161 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (160 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (159 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (158 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (157 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (156 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (155 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (154 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (153 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (152 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (151 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (150 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (149 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (148 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (147 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (146 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (145 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (144 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (143 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (142 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (141 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (140 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (139 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (138 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (137 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (136 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (135 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (134 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (133 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (132 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (131 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (130 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (129 retries left).
+FAILED - RETRYING: Wait for the reposync job to finish (128 retries left).
+changed: [labhost]
+
+TASK [reposync : Run createrepo in /var/www/html/pub/repos/rhel-7-server-rpms] ***
+Thursday 31 January 2019  17:04:45 +0100 (0:29:54.387)       0:47:19.117 ****** 
+changed: [labhost]
+
+TASK [reposync : sefcontext] ***************************************************
+Thursday 31 January 2019  17:05:03 +0100 (0:00:17.512)       0:47:36.629 ****** 
+changed: [labhost]
+
+TASK [reposync : restorecon] ***************************************************
+Thursday 31 January 2019  17:05:06 +0100 (0:00:03.521)       0:47:40.150 ****** 
+changed: [labhost]
+
+TASK [Set up template network] *************************************************
+Thursday 31 January 2019  17:05:07 +0100 (0:00:00.802)       0:47:40.953 ****** 
+
+TASK [libvirt_network : define networks] ***************************************
+Thursday 31 January 2019  17:05:07 +0100 (0:00:00.108)       0:47:41.061 ****** 
+included: /home/moss/infohub/consulting-lab/roles/libvirt_network/tasks/define_network.yml for labhost
+
+TASK [libvirt_network : Defining network template] *****************************
+Thursday 31 January 2019  17:05:07 +0100 (0:00:00.106)       0:47:41.168 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : Enable and Autostart virtual network template] *********
+Thursday 31 January 2019  17:05:08 +0100 (0:00:00.693)       0:47:41.862 ****** 
+changed: [labhost]
+
+TASK [libvirt_network : allow forward to vpn network] **************************
+Thursday 31 January 2019  17:05:08 +0100 (0:00:00.532)       0:47:42.394 ****** 
+changed: [labhost]
+
+TASK [iptables temlate network] ************************************************
+Thursday 31 January 2019  17:05:09 +0100 (0:00:00.402)       0:47:42.796 ****** 
+
+TASK [iptables : Allow all related and established connection on FORWARD] ******
+Thursday 31 January 2019  17:05:09 +0100 (0:00:00.107)       0:47:42.903 ****** 
+ok: [labhost]
+
+TASK [iptables : Set default policy on FORWARD to DROP] ************************
+Thursday 31 January 2019  17:05:09 +0100 (0:00:00.428)       0:47:43.332 ****** 
+ok: [labhost]
+
+TASK [iptables : Configure rules for all libvirt_networks] *********************
+Thursday 31 January 2019  17:05:10 +0100 (0:00:00.774)       0:47:44.106 ****** 
+included: /home/moss/infohub/consulting-lab/roles/iptables/tasks/libvirt-network.yml for labhost
+
+TASK [iptables : create a list of all networks except template] ****************
+Thursday 31 January 2019  17:05:10 +0100 (0:00:00.119)       0:47:44.225 ****** 
+ok: [labhost]
+
+TASK [iptables : add networks to list except template] *************************
+Thursday 31 January 2019  17:05:10 +0100 (0:00:00.084)       0:47:44.310 ****** 
+ [WARNING]: when statements should not include jinja2 templating delimiters
+such as {{ }} or {% %}. Found: '{{ network.name }}' not in item.name
+skipping: [labhost] => (item={u'name': u'template', u'type': u'open_network', u'dhcp_range_start': u'172.199.199.50', u'interface_address': u'172.199.199.1', u'prefix': 24, u'dhcp_range_stop': u'172.199.199.60', u'address': u'172.199.199.0', u'netmask': u'255.255.255.0'}) 
+
+TASK [iptables : print list] ***************************************************
+Thursday 31 January 2019  17:05:10 +0100 (0:00:00.072)       0:47:44.382 ****** 
+ok: [labhost] => {
+    "msg": []
+}
+
+TASK [iptables : create the chains to template] ********************************
+Thursday 31 January 2019  17:05:11 +0100 (0:00:00.094)       0:47:44.477 ****** 
+
+TASK [iptables : Allow inter-lan traffic on the network] ***********************
+Thursday 31 January 2019  17:05:11 +0100 (0:00:00.052)       0:47:44.529 ****** 
+changed: [labhost]
+
+TASK [iptables : Create FORWARD rule to chain template] ************************
+Thursday 31 January 2019  17:05:12 +0100 (0:00:01.599)       0:47:46.128 ****** 
+
+TASK [iptables : Add DROP log rule to each -to-template chain] *****************
+Thursday 31 January 2019  17:05:12 +0100 (0:00:00.073)       0:47:46.201 ****** 
+
+TASK [iptables : Allow all INPUT to network template] **************************
+Thursday 31 January 2019  17:05:12 +0100 (0:00:00.071)       0:47:46.273 ****** 
+changed: [labhost]
+
+TASK [iptables : Save rules] ***************************************************
+Thursday 31 January 2019  17:05:13 +0100 (0:00:00.456)       0:47:46.729 ****** 
+changed: [labhost]
+
+TASK [download boot iso] *******************************************************
+Thursday 31 January 2019  17:05:13 +0100 (0:00:00.430)       0:47:47.160 ****** 
+
+TASK [rhel-iso-download : assert] **********************************************
+Thursday 31 January 2019  17:05:13 +0100 (0:00:00.152)       0:47:47.312 ****** 
+ok: [labhost] => {
+    "changed": false, 
+    "msg": "All assertions passed"
+}
+
+TASK [rhel-iso-download : get certs] *******************************************
+Thursday 31 January 2019  17:05:13 +0100 (0:00:00.091)       0:47:47.404 ****** 
+changed: [labhost]
+
+TASK [rhel-iso-download : set_fact certs] **************************************
+Thursday 31 January 2019  17:05:14 +0100 (0:00:00.415)       0:47:47.819 ****** 
+ok: [labhost]
+
+TASK [rhel-iso-download : get keys] ********************************************
+Thursday 31 January 2019  17:05:14 +0100 (0:00:00.142)       0:47:47.961 ****** 
+changed: [labhost]
+
+TASK [rhel-iso-download : set_fact] ********************************************
+Thursday 31 January 2019  17:05:14 +0100 (0:00:00.447)       0:47:48.409 ****** 
+ok: [labhost]
+
+TASK [rhel-iso-download : ensure the destination directory exists] *************
+Thursday 31 January 2019  17:05:15 +0100 (0:00:00.154)       0:47:48.564 ****** 
+changed: [labhost]
+
+TASK [rhel-iso-download : download ISO (might take a while)] *******************
+Thursday 31 January 2019  17:05:15 +0100 (0:00:00.458)       0:47:49.022 ****** 
+changed: [labhost]
+
+TASK [rhel-iso-download : download ISO (fire and forget)] **********************
+Thursday 31 January 2019  17:05:25 +0100 (0:00:09.901)       0:47:58.923 ****** 
+skipping: [labhost]
+
+TASK [vm-template : create template storage] ***********************************
+Thursday 31 January 2019  17:05:25 +0100 (0:00:00.059)       0:47:58.983 ****** 
+changed: [labhost]
+
+TASK [vm-template : create qcow2 image] ****************************************
+Thursday 31 January 2019  17:05:26 +0100 (0:00:00.478)       0:47:59.462 ****** 
+changed: [labhost]
+
+TASK [vm-template : create kickstart] ******************************************
+Thursday 31 January 2019  17:05:26 +0100 (0:00:00.487)       0:47:59.950 ****** 
+changed: [labhost]
+
+TASK [vm-template : run virt-install] ******************************************
+Thursday 31 January 2019  17:05:28 +0100 (0:00:01.627)       0:48:01.578 ****** 
+changed: [labhost]
+
+TASK [vm-template : wait for template installation to finish] ******************
+Thursday 31 January 2019  17:05:31 +0100 (0:00:03.108)       0:48:04.687 ****** 
+FAILED - RETRYING: wait for template installation to finish (100 retries left).
+FAILED - RETRYING: wait for template installation to finish (99 retries left).
+FAILED - RETRYING: wait for template installation to finish (98 retries left).
+FAILED - RETRYING: wait for template installation to finish (97 retries left).
+FAILED - RETRYING: wait for template installation to finish (96 retries left).
+FAILED - RETRYING: wait for template installation to finish (95 retries left).
+FAILED - RETRYING: wait for template installation to finish (94 retries left).
+FAILED - RETRYING: wait for template installation to finish (93 retries left).
+FAILED - RETRYING: wait for template installation to finish (92 retries left).
+FAILED - RETRYING: wait for template installation to finish (91 retries left).
+FAILED - RETRYING: wait for template installation to finish (90 retries left).
+FAILED - RETRYING: wait for template installation to finish (89 retries left).
+FAILED - RETRYING: wait for template installation to finish (88 retries left).
+FAILED - RETRYING: wait for template installation to finish (87 retries left).
+FAILED - RETRYING: wait for template installation to finish (86 retries left).
+FAILED - RETRYING: wait for template installation to finish (85 retries left).
+FAILED - RETRYING: wait for template installation to finish (84 retries left).
+FAILED - RETRYING: wait for template installation to finish (83 retries left).
+FAILED - RETRYING: wait for template installation to finish (82 retries left).
+FAILED - RETRYING: wait for template installation to finish (81 retries left).
+FAILED - RETRYING: wait for template installation to finish (80 retries left).
+FAILED - RETRYING: wait for template installation to finish (79 retries left).
+FAILED - RETRYING: wait for template installation to finish (78 retries left).
+FAILED - RETRYING: wait for template installation to finish (77 retries left).
+FAILED - RETRYING: wait for template installation to finish (76 retries left).
+FAILED - RETRYING: wait for template installation to finish (75 retries left).
+FAILED - RETRYING: wait for template installation to finish (74 retries left).
+FAILED - RETRYING: wait for template installation to finish (73 retries left).
+FAILED - RETRYING: wait for template installation to finish (72 retries left).
+FAILED - RETRYING: wait for template installation to finish (71 retries left).
+FAILED - RETRYING: wait for template installation to finish (70 retries left).
+FAILED - RETRYING: wait for template installation to finish (69 retries left).
+FAILED - RETRYING: wait for template installation to finish (68 retries left).
+FAILED - RETRYING: wait for template installation to finish (67 retries left).
+FAILED - RETRYING: wait for template installation to finish (66 retries left).
+FAILED - RETRYING: wait for template installation to finish (65 retries left).
+FAILED - RETRYING: wait for template installation to finish (64 retries left).
+FAILED - RETRYING: wait for template installation to finish (63 retries left).
+FAILED - RETRYING: wait for template installation to finish (62 retries left).
+changed: [labhost]
+
+TASK [vm-template : destroy libvirt_networks] **********************************
+Thursday 31 January 2019  17:12:17 +0100 (0:06:46.338)       0:54:51.025 ****** 
+ok: [labhost]
+
+TASK [vm-template : undefined libvirt_networks] ********************************
+Thursday 31 January 2019  17:12:18 +0100 (0:00:00.660)       0:54:51.686 ****** 
+ok: [labhost]
+
+TASK [cleanup iptable rules] ***************************************************
+Thursday 31 January 2019  17:12:18 +0100 (0:00:00.573)       0:54:52.259 ****** 
+
+TASK [iptables : create a list of all networks except template] ****************
+Thursday 31 January 2019  17:12:18 +0100 (0:00:00.127)       0:54:52.386 ****** 
+ok: [labhost]
+
+TASK [iptables : add networks to list except template] *************************
+Thursday 31 January 2019  17:12:19 +0100 (0:00:00.179)       0:54:52.566 ****** 
+ [WARNING]: when statements should not include jinja2 templating delimiters
+such as {{ }} or {% %}. Found: '{{ network.name }}' not in item.name
+ok: [labhost] => (item={u'name': u'mgmt', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.5.0.1', u'dhcp_range_start': u'10.5.0.100', u'dhcp_range_stop': u'10.5.0.254', u'address': u'10.0.0.0', u'netmask': u'255.255.255.0'})
+ok: [labhost] => (item={u'name': u'net1', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.101.0.1', u'dhcp_range_start': u'10.101.0.2', u'dhcp_range_stop': u'10.101.0.254', u'address': u'10.101.0.0', u'netmask': u'255.255.255.0'})
+ok: [labhost] => (item={u'name': u'net2', u'type': u'open_network', u'prefix': 24, u'interface_address': u'10.102.0.1', u'dhcp_range_start': u'10.102.0.2', u'dhcp_range_stop': u'10.102.0.254', u'address': u'10.102.0.0', u'netmask': u'255.255.255.0'})
+
+TASK [iptables : print list] ***************************************************
+Thursday 31 January 2019  17:12:19 +0100 (0:00:00.243)       0:54:52.810 ****** 
+ok: [labhost] => {
+    "msg": [
+        "mgmt", 
+        "net1", 
+        "net2"
+    ]
+}
+
+TASK [iptables : Flush chains to template] *************************************
+Thursday 31 January 2019  17:12:19 +0100 (0:00:00.094)       0:54:52.904 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net1)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Delete FORWARD rule to chain template] ************************
+Thursday 31 January 2019  17:12:20 +0100 (0:00:01.125)       0:54:54.030 ****** 
+changed: [labhost] => (item=mgmt)
+changed: [labhost] => (item=net1)
+changed: [labhost] => (item=net2)
+
+TASK [iptables : Delete chains to template] ************************************
+Thursday 31 January 2019  17:12:21 +0100 (0:00:01.031)       0:54:55.062 ****** 
+failed: [labhost] (item=mgmt) => {"changed": true, "cmd": ["iptables", "-X", "mgmt-to-template"], "delta": "0:00:00.005101", "end": "2019-01-31 17:12:21.888800", "item": "mgmt", "msg": "non-zero return code", "rc": 1, "start": "2019-01-31 17:12:21.883699", "stderr": "iptables: No chain/target/match by that name.", "stderr_lines": ["iptables: No chain/target/match by that name."], "stdout": "", "stdout_lines": []}
+failed: [labhost] (item=net1) => {"changed": true, "cmd": ["iptables", "-X", "net1-to-template"], "delta": "0:00:00.005034", "end": "2019-01-31 17:12:22.220137", "item": "net1", "msg": "non-zero return code", "rc": 1, "start": "2019-01-31 17:12:22.215103", "stderr": "iptables: No chain/target/match by that name.", "stderr_lines": ["iptables: No chain/target/match by that name."], "stdout": "", "stdout_lines": []}
+failed: [labhost] (item=net2) => {"changed": true, "cmd": ["iptables", "-X", "net2-to-template"], "delta": "0:00:00.004325", "end": "2019-01-31 17:12:22.492688", "item": "net2", "msg": "non-zero return code", "rc": 1, "start": "2019-01-31 17:12:22.488363", "stderr": "iptables: No chain/target/match by that name.", "stderr_lines": ["iptables: No chain/target/match by that name."], "stdout": "", "stdout_lines": []}
+...ignoring
+
+TASK [iptables : Delete Allow all INPUT to network template] *******************
+Thursday 31 January 2019  17:12:22 +0100 (0:00:01.026)       0:54:56.089 ****** 
+changed: [labhost]
+
+TASK [iptables : save iptables rules] ******************************************
+Thursday 31 January 2019  17:12:23 +0100 (0:00:00.414)       0:54:56.503 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : start the mdadm sync (max)] *********************************
+Thursday 31 January 2019  17:12:23 +0100 (0:00:00.415)       0:54:56.919 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : start the mdadm sync (min)] *********************************
+Thursday 31 January 2019  17:12:23 +0100 (0:00:00.405)       0:54:57.325 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : temporarily pause the mdadm sync (max)] *********************
+Thursday 31 January 2019  17:12:24 +0100 (0:00:00.375)       0:54:57.701 ****** 
+changed: [labhost]
+
+TASK [mdadm-sync : temporarily pause the mdadm sync (min)] *********************
+Thursday 31 January 2019  17:12:24 +0100 (0:00:00.375)       0:54:58.076 ****** 
+changed: [labhost]
+
+PLAY RECAP *********************************************************************
+labhost                    : ok=165  changed=113  unreachable=0    failed=0   
+
+Thursday 31 January 2019  17:12:24 +0100 (0:00:00.305)       0:54:58.382 ****** 
+=============================================================================== 
+reposync : Wait for the reposync job to finish ----------------------- 1794.39s
+vm-template : wait for template installation to finish ---------------- 406.34s
+hetzner-post-provision : install packages ----------------------------- 258.26s
+reboot : Wait for the {{ ansible_host }} to finish rebooting ---------- 234.32s
+hetzner-provision : run the setup (long running task. approx 5min) ---- 140.29s
+openvpn : install openvpn ---------------------------------------------- 69.06s
+hetzner-post-provision : update all packages --------------------------- 51.83s
+reposync : install packages -------------------------------------------- 34.04s
+knockd : install deps -------------------------------------------------- 32.78s
+reposync : Run createrepo in /var/www/html/pub/repos/rhel-7-server-rpms -- 17.51s
+subman : register ------------------------------------------------------ 14.40s
+subman : attach -------------------------------------------------------- 13.24s
+rhel-iso-download : download ISO (might take a while) ------------------- 9.90s
+knockd : install knockd server (CentOS) --------------------------------- 8.52s
+subman : ensure subscription-manager is installed ----------------------- 5.08s
+subman : get pool ------------------------------------------------------- 4.35s
+knockd : build from SRPM ------------------------------------------------ 4.26s
+Gathering Facts --------------------------------------------------------- 4.05s
+libvirt : disable firewalld --------------------------------------------- 3.86s
+reposync : sefcontext --------------------------------------------------- 3.52s
