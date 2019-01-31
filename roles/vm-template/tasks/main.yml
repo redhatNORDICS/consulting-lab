@@ -2,7 +2,7 @@
 # Will create a Template out of a ISO and a kickstart file.
 
 - name: Set up template network
-  import_role:
+  include_role:
     name: libvirt_network
   vars:
     libvirt_networks:
@@ -16,7 +16,7 @@
       dhcp_range_stop: 172.199.199.60
 
 - name: iptables temlate network
-  import_role:
+  include_role:
     name: iptables
   vars:
     libvirt_networks:
@@ -30,7 +30,7 @@
       dhcp_range_stop: 172.199.199.60
 
 - name: download boot iso
-  import_role:
+  include_role:
     name: rhel-iso-download
   vars:
     image_dest_dir: "/var/lib/libvirt/images/isos/"
