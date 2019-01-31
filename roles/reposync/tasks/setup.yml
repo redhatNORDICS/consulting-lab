@@ -56,7 +56,7 @@
 
 # Fire and forget. Allow up to 2hours
 - name: start reposync
-  shell: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n | tee /var/log/reposync.$(date +%Y%m%d).log
+  shell: reposync -p "/var/www/html/pub/repos/" --repoid=rhel-7-server-rpms -m -n -t | tee /var/log/reposync.$(date +%Y%m%d).log
   async: 7200
   poll: 0
   register: reposync_job
