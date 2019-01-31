@@ -1,0 +1,22 @@
+
+- name: get certs
+  shell: "ls /etc/pki/entitlement/*  | grep -v '\\-key.pem'"
+  register: certs
+
+- name: set_fact certs
+  set_fact:
+    cdn_certs: "{{ certs.stdout_lines }}"
+
+- name: get keys
+  #command: "ls /etc/pki/entitlement/*-key.pem"
+  shell: "ls /etc/pki/entitlement/*  | grep  '\\-key.pem'"
+  register: cdn_keys
+
+- name: set_fact
+  set_fact:
+    cdn_keys: "{{ cdn_keys.stdout_lines }}"
+
+- name: (CentOS) configure rhel-7-server-rpms repo
+  template:
+    src: rhel.repo.j2
+    dest: /etc/yum.repos.d/rhel-7-server-rpms.repo
