@@ -37,8 +37,9 @@
     --graphics spice,listen=127.0.0.1 
     --noautoconsole
 
-- name: create extra disk
-  include_tasks: create-disk.yml
+- name: create extra disks
+  include_tasks: create-extra-disk.yml
   loop: "{{ vm.extra_disks }}"
   loop_control:
     loop_var: disk
+  when: vm.extra_disks is defined | default(false)
