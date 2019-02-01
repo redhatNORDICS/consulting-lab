@@ -1,0 +1,13 @@
+- hosts: labhost
+  become: true
+  tasks:
+  - include_role: 
+      name: vm-create
+    vars:
+      vm:
+        name: auto-test
+        network: mgmt
+        extra_disks:
+        - size: 50G
+        - size: 20G
+        

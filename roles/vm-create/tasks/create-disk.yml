@@ -1,0 +1,45 @@
+- set_fact:
+    alphabet: ['a','b','c','d','e','f','g','h']
+
+- name: get current blockdevices
+  command: "virt-filesystems -d {{ vm.name }} --blkdevs"
+  register: blkdevs
+
+- set_fact:
+    dev_list: "{{ blkdevs.stdout_lines }}"
+
+
+- name: pickout the /dev string and save for later
+  set_fact:
+    dev_string: "{{ dev_list[0][:-1] }}"
+
+- debug:
+    msg: "{{ dev_string }}"
+
+- name: remove the /dev part from list
+  set_fact:
+    comparison_list: "{{ dev_list | map('regex_replace', dev_string, '') | list }}"
+
+- debug:
+    msg: "{{ comparison_list }}"
+
+- name: differ the two lists
+  set_fact:
+    usable_list: "{{ alphabet | difference(comparison_list) }}"
+
+- name: whats the name gonna be
+  set_fact:
+    dev_name: "{{dev_string | regex_replace('/dev/','') }}{{ usable_list[0]}}"
+
+- name: create disk
+  #command: virsh vol-create-as --pool default --name {{ vm.name }}-{{ dev_name }}.qcow2 --capacity {{ disk.size }} --format qcow2 --prealloc-metadata
+  command: qemu-img create -f qcow2 /var/lib/libvirt/images/{{ vm.name }}-{{ dev_name }}.qcow2 {{ disk.size }}
+
+- name: set perms
+  file:
+    path: /var/lib/libvirt/images/{{ vm.name }}-{{ dev_name }}.qcow2
+    owner: qemu
+    group: qemu
+
+- name: attach disk
+  command: virsh attach-disk {{ vm.name }} --source /var/lib/libvirt/images/{{ vm.name }}-{{ dev_name }}.qcow2 --target {{ dev_name}} --persistent --targetbus virtio --driver qemu --sourcetype file

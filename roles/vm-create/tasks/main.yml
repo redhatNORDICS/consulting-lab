@@ -1,0 +1,44 @@
+---
+# 
+# vm:
+#   name: vm-name
+#   template: <default(template_name)>
+#   network: mgmt
+#   memory: <default 2048>
+#   cpu: default 1
+#   disk: <default 20G>
+#   extra_disks: <optional>
+#   - name: <default( vm-name-diskN)
+#     size: <default(20)>
+#   - name: <default( vm-name-diskN)
+#     size: <default(20)>
+
+#- name: create extra disks
+#  include_tasks: create-disk.yml
+#  loop: "{{ extra_disks }}"
+#  loop_control:
+#    loop_var: disk
+
+- name: clone template image
+  command: >
+    qemu-img create -f qcow2 
+    -b /var/lib/libvirt/images/templates/template-{{ vm.template | default(template_name) | default('7.6') }}.qcow2 
+    /var/lib/libvirt/images/{{ vm.name }}.qcow2 
+    {{ vm.disk | default('20G') }} 
+
+
+- name: create VM 
+  command: > 
+    virt-install --name {{ vm.name }}
+    --vcpu {{ vm.cpu | default('1') }} 
+    --memory {{ vm.memory | default(2048) }} 
+    --disk /var/lib/libvirt/images/{{ vm.name }}.qcow2,bus=virtio 
+    --import 
+    --graphics spice,listen=127.0.0.1 
+    --noautoconsole
+
+- name: create extra disk
+  include_tasks: create-disk.yml
+  loop: "{{ vm.extra_disks }}"
+  loop_control:
+    loop_var: disk
