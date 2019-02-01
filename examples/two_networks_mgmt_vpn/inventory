@@ -2,3 +2,8 @@
 [labhost]
 labhost
 
+[vms]
+satellite name=satellite extra_disks='[{"size":"20G"}]' cpu=2 memory=4096
+
+
+
