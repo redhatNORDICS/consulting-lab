@@ -1,0 +1,9 @@
+- hosts: labhost
+  become: true
+  tasks:
+  - name: get xml line of ip
+    shell: "virsh net-dumpxml {{ network }} | grep {{ ip_address }}"
+    register: netxml
+
+  - name: delete record live and permanent
+    command: 'virsh net-update --network mgmt --command delete --section ip-dhcp-host --xml "{{ netxml.stdout | trim }}" --config --live'
