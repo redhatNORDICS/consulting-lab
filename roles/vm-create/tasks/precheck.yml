@@ -1,0 +1,14 @@
+- debug:
+    msg: "{{ vm.ip_address }}"
+
+- set_fact:
+    selected_network: "{{ network }}"
+  loop: "{{ libvirt_networks }}"
+  loop_control:
+    loop_var: network
+  when: "network['name'] in vm.network"
+    
+- assert:
+    that:
+      - "vm.ip_address | ipaddr(selected_network.subnet)"
+    msg: "{{ vm.ip_address }} is not within the {{ selected_network.subnet }} range"
