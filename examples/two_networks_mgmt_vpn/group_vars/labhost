@@ -18,30 +18,15 @@ users:
 libvirt_networks:
 - name: mgmt
   type: open_network
-  address: 10.0.0.0
-  interface_address: 10.5.0.1
-  netmask: 255.255.255.0
-  prefix: 24
-  dhcp_range_start: 10.5.0.100
-  dhcp_range_stop: 10.5.0.254
+  subnet: 10.5.0.0/24
 
 - name: net1
   type: open_network
-  address: 10.101.0.0
-  interface_address: 10.101.0.1
-  netmask: 255.255.255.0
-  prefix: 24
-  dhcp_range_start: 10.101.0.2
-  dhcp_range_stop: 10.101.0.254
+  subnet: 10.101.0.0/24
 
 - name: net2
   type: open_network
-  address: 10.102.0.0
-  interface_address: 10.102.0.1
-  netmask: 255.255.255.0
-  prefix: 24
-  dhcp_range_start: 10.102.0.2
-  dhcp_range_stop: 10.102.0.254
+  subnet: 10.102.0.0/24
 
 # OpenVPN
 openvpn_network: 172.16.99.0

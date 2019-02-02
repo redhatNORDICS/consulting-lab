@@ -21,8 +21,8 @@
   iptables:
     action: insert
     chain: FORWARD
-    source: "{{ network.address }}/{{ network.prefix }}"
-    destination: 192.168.201.0/24
+    source: "{{ network.subnet }}"
+    destination: "{{ openvpn_network }}/30"
     jump: ACCEPT
   register: allow_vpn
 
