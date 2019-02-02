@@ -22,12 +22,7 @@
     libvirt_networks:
     - name: template
       type: open_network
-      address: 172.199.199.0
-      interface_address: 172.199.199.1
-      netmask: 255.255.255.0
-      prefix: 24
-      dhcp_range_start: 172.199.199.50
-      dhcp_range_stop: 172.199.199.60
+      subnet: 172.199.199.0/24
 
 - name: download boot iso
   include_role:
