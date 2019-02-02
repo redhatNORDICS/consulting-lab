@@ -18,7 +18,7 @@
     msg: "{{ mac_address }}"
 
 - name: add static ip address
-  command: "virsh net-update {{ vm.network }} add ip-dhcp-host \"<host mac='{{ mac_address }}' ip='{{ vm.ip_address }}'/>\" --live --config"
+  command: "virsh net-update {{ vm.network }} add ip-dhcp-host \"<host mac='{{ mac_address }}' name='{{ vm.name }}' ip='{{ vm.ip_address }}'/>\" --live --config"
 
 - name: start the VM
   virt:
