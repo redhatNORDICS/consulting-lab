@@ -1,0 +1,26 @@
+---
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/sect-managing_guest_virtual_machines_with_virsh-managing_virtual_networks#static-ip-address
+
+- name: stop the VM
+  virt:
+    name: "{{ vm.name }}"
+    command: destroy
+
+- name: get mac-address of VM
+  shell: "virsh domiflist {{ vm.name }} | awk '{ print $5 }' | tail -n +3 | head -n -1"
+  register: vm_mac
+  until: "vm_mac.stdout != ''"
+
+- set_fact:
+    mac_address: "{{ vm_mac.stdout }}"
+
+- debug:
+    msg: "{{ mac_address }}"
+
+- name: add static ip address
+  command: "virsh net-update {{ vm.network }} add ip-dhcp-host \"<host mac='{{ mac_address }}' ip='{{ vm.ip_address }}'/>\" --live --config"
+
+- name: start the VM
+  virt:
+    name: "{{ vm.name }}"
+    command: start

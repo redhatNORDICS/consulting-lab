@@ -13,11 +13,9 @@
 #   - name: <default( vm-name-diskN)
 #     size: <default(20)>
 
-#- name: create extra disks
-#  include_tasks: create-disk.yml
-#  loop: "{{ extra_disks }}"
-#  loop_control:
-#    loop_var: disk
+- name: precheck
+  include_tasks: precheck.yml
+
 
 - name: clone template image
   command: >
@@ -27,7 +25,7 @@
     {{ vm.disk | default('20G') }} 
 
 
-- name: create VM 
+- name: "create VM {{ vm.name }}"
   command: > 
     virt-install --name {{ vm.name }}
     --vcpu {{ vm.cpu | default('1') }} 
@@ -36,6 +34,9 @@
     --import 
     --graphics spice,listen=127.0.0.1 
     --noautoconsole
+    --network network={{ vm.network }},model=virtio
+    --os-variant linux 
+    --os-type rhel7
 
 - name: create extra disks
   include_tasks: create-extra-disk.yml
@@ -43,3 +44,14 @@
   loop_control:
     loop_var: disk
   when: vm.extra_disks is defined | default(false)
+
+- name: "set static ip for {{ vm.name }}"
+  include_tasks: static-ip.yml
+  when: vm.ip_address is defined | default(false)
+
+  #- name: start up VM
+
+- name: "no static ip set"
+  include_tasks: non-static-ip.yml
+  when: vm.ip_address is not defined | default(true)
+
