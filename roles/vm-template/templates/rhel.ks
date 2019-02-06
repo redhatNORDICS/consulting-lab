@@ -2,7 +2,8 @@
 auth --enableshadow --passalgo=sha512
 # Use network installation
 url --url="http://172.199.199.1/rhel-7-server-rpms/"
-# Use graphical install
+# Use text install
+text
 
 # Run the Setup Agent on first boot
 firstboot --disable
