@@ -38,11 +38,5 @@
 - name: create disk
   command: qemu-img create -f qcow2 /var/lib/libvirt/images/{{ image_name }}.qcow2 {{ disk.size }} -o preallocation=metadata
 
-- name: set perms
-  file:
-    path: /var/lib/libvirt/images/{{ image_name }}.qcow2
-    owner: qemu
-    group: qemu
-
 - name: attach disk
   command: virsh attach-disk {{ vm.name }} --source /var/lib/libvirt/images/{{ image_name }}.qcow2 --target {{ dev_name}} --persistent --targetbus virtio --driver qemu --sourcetype file --subdriver qcow2
