@@ -6,6 +6,15 @@
     name: "{{ vm.name }}"
     command: destroy
 
+- name: "write tmp network settings for {{ vm.name }}"
+  template:
+    src: ifcfg-eth0.static
+    dest: "/tmp/ifcfg-eth0-{{ vm.name }}"
+
+- name: sysprep image
+  command: >
+    virt-sysprep -d {{ vm.name }} --hostname {{ vm.name }}  --upload /tmp/ifcfg-eth0-{{ vm.name }}:/etc/sysconfig/network-scripts/ifcfg-eth0
+
 - name: get mac-address of VM
   shell: "virsh domiflist {{ vm.name }} | awk '{ print $5 }' | tail -n +3 | head -n -1"
   register: vm_mac
@@ -24,3 +33,11 @@
   virt:
     name: "{{ vm.name }}"
     command: start
+
+- name: ensure VM is present in inventory
+  lineinfile: 
+    path: "{{ inventory_dir }}/connections"
+    line: "{{ vm.name }} ansible_host='{{ vm.ip_address }}'"
+  delegate_to: localhost
+  become: false
+
