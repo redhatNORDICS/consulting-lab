@@ -13,7 +13,7 @@
 
 - name: sysprep image
   command: >
-    virt-sysprep -d {{ vm.name }} --hostname {{ vm.name }}  --upload /tmp/ifcfg-eth0-{{ vm.name }}:/etc/sysconfig/network-scripts/ifcfg-eth0
+    virt-sysprep -d {{ vm.name }} --hostname {{ vm.name }}  --upload /tmp/ifcfg-eth0-{{ vm.name }}:/etc/sysconfig/network-scripts/ifcfg-eth0 --operations -user-account,-ssh-userdir,-ssh-hostkeys
 
 - name: get mac-address of VM
   shell: "virsh domiflist {{ vm.name }} | awk '{ print $5 }' | tail -n +3 | head -n -1"
