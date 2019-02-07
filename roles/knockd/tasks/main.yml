@@ -21,12 +21,12 @@
       
   - name: install deps
     yum:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - libpcap-devel
-      - gcc
-      - rpm-build
+      name: "{{ packages }}"
+    vars:
+      packages:
+        - libpcap-devel
+        - gcc
+        - rpm-build
 
   - name: build from SRPM
     command: rpmbuild --rebuild /tmp/knock-0.7-1.el7.src.rpm

@@ -30,7 +30,7 @@
 
 - name: configure client
   template:
-    dest: ~/openvpnconfigs/{{ inventory_hostname }}/client.conf
+    dest: ~/openvpnconfigs/{{ inventory_hostname }}/{{ inventory_hostname }}.conf
     src: client.conf.j2
   delegate_to: localhost
 
@@ -38,7 +38,7 @@
   fetch:
     src: /etc/openvpn/static.key
     flat: true
-    dest: ~/openvpnconfigs/{{inventory_hostname}}/static.key
+    dest: ~/openvpnconfigs/{{ inventory_hostname }}/static.key
 
 - name: open openvpn port
   iptables:
