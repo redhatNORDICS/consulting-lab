@@ -153,7 +153,7 @@ In INI style it would look like
 [vms]
 host1 name="host1",cpu="1",memory="2048",network="mgmt",ip_address="10.5.0.21"
 
-``
+```
 
 WIP: Not implemented. And not sure it's a good idea yet.
  we can also define any roles within this repositories that should be executed on the VM once it's up.
