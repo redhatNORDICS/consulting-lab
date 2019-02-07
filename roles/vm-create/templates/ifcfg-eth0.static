@@ -1,0 +1,10 @@
+DEVICE=eth0
+NAME=eth0
+BOOTPROTO=none
+ONBOOT=yes
+
+IPADDR={{ vm.ip_address }}
+PREFIX={{ selected_network.subnet | ipaddr('prefix') }}
+GATEWAY={{ selected_network.subnet | ipaddr('1') | ipaddr('address') }}
+DNS1={{ selected_network.subnet | ipaddr('1') | ipaddr('address') }}
+
