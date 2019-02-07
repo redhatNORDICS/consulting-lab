@@ -22,3 +22,35 @@ A repository containing resources used by consultants in their lab environments
 | users                  | creates local users                                            |
 | squid                  | install a squid proxy                                          |
 | vm-template            | creates an up-to-date rhel7.6 template image                   |
+
+
+## Setup you environment in inventory/labenv
+
+Trying out the concept of merging two files to become a flattend inventory.
+It consists of two parts: the `inventory/labenv` and the `inventory/connections`.
+
+`inventory/connections` is manipulated by the `vm-create` role.  
+When it creates a new host, the connection details are added here for future connections!
+
+`inventory/labenv` is in the YAML format, which allows us to add lists and dicts in a nicer way than INI files.  
+And to some it's nicer to keep the whole environment within one file, instead of spreading it out over group_vars and host_vars.  
+However, each to his own and nothing stopping you from using the separate vaars folders.
+
+Add VM's to the following section: 
+``` 
+  #####################
+  # Virtual Machines
+  #####################
+  children:
+    vms:
+      hosts:
+        host1:
+          name: "host1"
+          cpu: "1"
+          memory: "2048"
+          network: "mgmt"
+          ip_address: "10.5.0.21"
+```
+
+You can then run the `adhoc/create-all-vms.yml` playbook to create these hosts.
+
