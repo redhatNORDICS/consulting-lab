@@ -45,8 +45,9 @@ You find more in-depth instructions on how to create your own lab below (or link
 
 ## Setup you environment in inventory/labenv
 
-Were trying out the concept of merging two files to become a flattend inventory.
+Were trying out the concept of merging two files to become a flattened inventory.  
 It consists of two parts: the `inventory/labenv` and the `inventory/connections`.
+
 
 `inventory/labenv` is in the YAML format, which allows us to add lists and dicts in a nicer way than INI files.
 For some it's nicer to keep the whole environment within one file, instead of spreading it out over group_vars and host_vars.  
@@ -60,15 +61,17 @@ More on that later.
 ### inventory/labenv
 
 Ansible reads variables from multiple places before a playbook run.  
-You can define them in the inventory, the group_vars, host_vars, vars inside the playbook and withing the role vars/.  
-If there are conflicting vars from the different sources, the reverse order of the above applies. [Variable precedence](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable)
+You can define them in the *inventory*, the *group_vars*, *host_vars*, vars inside the playbook and withing the role `vars/`.  
+If there are conflicting vars from the different sources, the reverse order of the above applies ([Variable precedence](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable)).  
 When the playbook runs, the variables are read in and then flattened.
 
-The same thing can kinda be said about inventories. They can come from several files and will at run time be flattened into a single inventory.
+The same thing can kinda be said about inventories. 
+It can be made out from several files and will at run time be flattened into a single inventory.
 
 `inventories/labenv` is a place to define your lab environment if you want.  
-As seen with [openshift-ansible](https://github.com/openshift-ansible/) for instance it can be used to define both nodes and the variables that control the setup of the OpenShift cluster.  
+As seen with [openshift-ansible](https://github.com/openshift-ansible/) for instance, it can be used to define both nodes and the variables that control the setup of the OpenShift cluster.  
 You can think if the inventory/labenv in the same way.  
+
 Since we might end up with quite a lot lists and dictionaries for the setup, it can makes sense to use the YAML format instead. 
 
 We start by defining all the _required_ vars to get an lab environment in the way it's intended.
@@ -121,6 +124,8 @@ _with INI style, this would look like:_
 ```
 [vms]
 host1
+
+```
 
 The difference here is that they do not exist _yet_. 
 Once created, they will end up in the `inventory/connections` file with correct connection information.
