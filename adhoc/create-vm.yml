@@ -5,32 +5,33 @@
       name: vm-create
     vars:
       vm:
-        name: test
+        name: test-ip2
         network: mgmt
+        ip_address: 10.5.0.123
 
-  - include_role: 
-      name: vm-create
-    vars:
-      vm:
-        name: test-extradisk
-        network: mgmt
-        extra_disks:
-        - size: 25G
-        - size: 35G
-
-  - include_role: 
-      name: vm-create
-    vars:
-      vm:
-        name: satellite
-        network: mgmt
-        extra_disks:
-        - size: 150G
-          name: pulp
-        - size: 20G
-          name: mongo
-        - size: 20G
-          name: postgres
+#  - include_role: 
+#      name: vm-create
+#    vars:
+#      vm:
+#        name: test-extradisk
+#        network: mgmt
+#        extra_disks:
+#        - size: 25G
+#        - size: 35G
+#
+#  - include_role: 
+#      name: vm-create
+#    vars:
+#      vm:
+#        name: satellite
+#        network: mgmt
+#        extra_disks:
+#        - size: 150G
+#          name: pulp
+#        - size: 20G
+#          name: mongo
+#        - size: 20G
+#          name: postgres
 
           
         

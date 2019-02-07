@@ -1,0 +1,5 @@
+- hosts: labhost
+  become: true
+  roles:
+  - create-inventory-vms
+
