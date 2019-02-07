@@ -6,7 +6,7 @@
   poll: 0
   ignore_errors: true
 
-- name: "Wait for the {{ ansible_host }} to finish rebooting"
+- name: "Wait for the {{ inventory_hostname }} to finish rebooting"
   wait_for_connection: 
     delay: "{{ reboot_delay }}"
     timeout: "{{ reboot_timeout }}"
@@ -16,9 +16,9 @@
   tags: wait_reboot
 
 
-- name: "Wait for the {{ ansible_host }} to finish rebooting"
+- name: "Wait for the {{ inventory_hostname }} to finish rebooting"
   wait_for:
-    host: "{{ ansible_host }}"
+    host: "{{ inventory_hostname }}"
     search_regex: OpenSSH
     port: 22
     sleep: "{{ reboot_sleep }}"
