@@ -31,6 +31,8 @@
 - name: get xml line of ip if it exist
   shell: "virsh net-dumpxml {{ vm.network }} | grep {{ vm.ip_address }}"
   register: netxml
+  failed_when: false
+  ignore_errors: true
 
 - name: delete existing record
   command: 'virsh net-update --network mgmt --command delete --section ip-dhcp-host --xml "{{ netxml.stdout | trim }}" --config --live'
