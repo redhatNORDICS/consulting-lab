@@ -12,12 +12,6 @@
     dest: /root/hetzner.config
   when: override_hetzner_installimage_config is defined and ansible_fqdn == "rescue"
 
-- command: file /root/hetzner.config 
-  register: whoami
-  
-- debug:
-    msg: "{{ whoami }}"
-
 - name: run the setup (long running task. approx 5min)
   command: /root/.oldroot/nfs/install/installimage -c /root/hetzner.config -a 
   register: installimage
