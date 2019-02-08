@@ -18,6 +18,6 @@
 # But the variable we need to define is the `ansible_host:`.
 #
 [vms:vars]
-ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q labhost" -o ServerAliveInterval=300 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no'
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q labhost" -o ServerAliveInterval=300 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no -o "UserKnownHostsFile /dev/null"'
 
 [vms]
