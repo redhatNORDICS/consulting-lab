@@ -8,9 +8,9 @@
 
 - name: register system
   redhat_subscription:
-    #pool: "^Employee SKU$"
-    pool_ids: 
-      - {{ rh_poolids }}
+    pool: "^Employee SKU$"
+    #pool_ids: 
+    #  - {{ rh_poolids }}
     username: "{{ rh_username }}"
     password: "{{ rh_password }}"
 

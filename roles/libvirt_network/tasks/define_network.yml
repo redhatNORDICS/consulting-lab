@@ -22,7 +22,7 @@
     action: insert
     chain: FORWARD
     source: "{{ network.address }}/{{ network.prefix }}"
-    destination: 192.168.201.0/24
+    destination: "{{ openvpn_network }}/24"
     jump: ACCEPT
   register: allow_vpn
 

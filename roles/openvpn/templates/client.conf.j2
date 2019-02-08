@@ -1,3 +1,4 @@
+{{ ansible_managed | comment }}
 dev tun
 auth-nocache
 ifconfig {{ openvpn_network_client }} {{ openvpn_network_gw }}
