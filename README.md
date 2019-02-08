@@ -22,26 +22,26 @@ You find more in-depth instructions on how to create your own lab below (or link
 
 ## Roles in this repository
 
-| role                   | description                                                    |
-| ---------------------- | -------------------------------------------------------------- |
-| cdnmirror              | sets up a simple CDN mirror on a VM                            |
-| reposync               | creates a rhel7 repomirror on the labhost                      |
-| hetzner-post-provision | role used for post provision tasks                             |
-| hetzner-provision      | initial provision tasks when hetzner machine is in rescue mode |
-| iptables               |
-| knockd                 |
+| role                                                    | description                                                                           |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| [cdnmirror](/roles/cdnmirror)                           | sets up a simple CDN mirror on a VM                                                   |
+| [reposync](/roles/reposync)                             | creates a rhel7 repomirror on the labhost. requires active subscription (see `subman`)|
+| [hetzner-post-provision](/roles/hetzner-port-provision) | role used for post provision tasks                                                    |
+| [hetzner-provision](/roles/hetzner-provision)           | initial provision tasks when hetzner machine is in rescue mode                        |
+| [iptables](/roles/iptables)                             | role to configure routing between networks created with libvirt_network               |
+| [knockd](/roles/knockd)                                 | configure port knocking                                                               |
 | libvirt                |
 | libvirt_network        |
-| mdadm-sync             |
-| motd                   | sets a motd on the target machine                              |
-| openvpn                | sets up a static openvpn server                                |
-| reboot                 | reboots the target machine and waits for it come back          |
-| rhel-iso-download      |
-| subman                 |
-| users                  | creates local users                                            |
-| squid                  | install a squid proxy                                          |
-| vm-template            | creates an up-to-date rhel7.6 template image                   |
-| vm-create		 | creates VM's using template created by vm-template		  |
+| [mdadm-sync](/roles/mdadm-sync)                         | pause and start mdadm RAID sync                                                       |
+| [motd](/roles/motd)                                     | sets a motd on the target machine                                                     |
+| [openvpn](/roles/openvpn)                               | sets up a static openvpn server                                                       |
+| [reboot](/roles/reboot)                                 | reboots the target machine and waits for it come back                                 |
+| [rhel-iso-download](/roles/rhel-iso-download)           | downloads images from redhat CDN. requires active subscription (see `subman`)         |
+| [subman](/roles/subman)                                 | register and attaches subscription if not present                                     |
+| [users](/roles/users)                                   | creates local users with authorized_keys and sudo                                     |
+| [squid](/roles/squid)                                   | install a squid proxy                                                                 |
+| [vm-template](/roles/vm-template)                       | creates an up-to-date rhel7.6 template image. deps: `reposync`,`rhel-iso-download`    |
+| [vm-create](/roles/vm-create)                           | creates VM's acord. to spec. Supports static ip and extra disks. deps: `vm-template`  |
 
 ## Setup you environment in inventory/labenv
 
@@ -178,7 +178,7 @@ ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q labhost" -o ServerAliv
 
 This variables forces Ansible to use the labhost as a jumpserver to reach the VM's that we create.
 
-When the vm-create role runs, it will add a host entry to the `[vms]` group automatically.
+When the vm-create role runs, it will add a host entry to the `[vms]` group automatically and enter the IP using `ansible_host` ['vm-create/tasks/static-ip.yml'](/roles/vm-create/tasks/static-ip.yml). 
 We will then be able to connect to VM either right away, or on our next playbook run without touching anything.
 
 ```
@@ -186,5 +186,6 @@ We will then be able to connect to VM either right away, or on our next playbook
 ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q labhost" -o ServerAliveInterval=300 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no'
 
 [vms]
-myvm1 ansible_
+# after creation
+myvm1 ansible_host='10.5.0.15'
 ```
