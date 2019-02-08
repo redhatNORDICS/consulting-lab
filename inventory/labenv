@@ -1,0 +1,79 @@
+---
+# This is a sub-part of the inventory
+# Here we define our whole lab environment.
+#
+# We use the YAML format because we define alot of lists and dictionaries and they become quite clumsy with the INI format
+# https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html#hosts-and-groups
+
+
+all:
+  vars:
+    # This is the vars file that we use to provide the variables we want for ALL roles and configure and describe the whole lab environment.
+    rh_username: consultant@redhat.com
+    rh_password: supersecret
+    
+    # users role
+    users:
+    - name: labuser
+      public_key: "ssh-rsa AAAAB3NzaC1yU+olD43JLpDj35L+vx02TvVScBhseSWwCCsATZBxEpIg/BtMyT5bXF6WjJL8PTzNA+xY5+OoPM1d+JasFb28M+Gxj9pjD4xFT/MR5Rvaor/GiooX+7jxZubi6b0sEfvkgLkCol2y69ptAhIEAk+qzKwBVseuyGjOQrjbK0KQXFy6xfOyFZwqK/ofz"
+    
+    # libvirt
+    libvirt_networks:
+    - name: mgmt
+      type: open_network
+      subnet: 10.5.0.0/24
+    
+    - name: net1
+      type: open_network
+      subnet: 10.101.0.0/24
+    
+    - name: net2
+      type: open_network
+      subnet: 10.102.0.0/24
+    
+    # OpenVPN
+    openvpn_network: 172.16.99.0
+    openvpn_network_gw: 172.16.99.1
+    openvpn_network_client: 172.16.99.2
+       
+    # knockd
+    #knockd_nic: "eth0"
+    #knockd_ssh_alternate_port: 443 (not implemented yet)
+    knockd_1seq: "1234:udp"
+    knockd_2seq: "1234:tcp"
+    knockd_3seq: "1234:udp"
+
+
+  hosts:
+    labhost
+
+  #####################
+  # Virtual Machines
+  #####################
+  children:
+    vms:
+      hosts:
+        host1:
+          name: "host1"
+          cpu: "1" 
+          memory: "2048"
+          network: "mgmt"
+          ip_address: "10.5.0.21"
+        host2:
+          name: "host2"
+          cpu: "1" 
+          memory: "2048"
+          network: "mgmt"
+          ip_address: "10.5.0.22"
+        host3:
+          name: "host3"
+          cpu: "1" 
+          memory: "1024"
+          network: "mgmt"
+          ip_address: "10.5.0.23"
+        host4:
+          name: "host4"
+          cpu: "1" 
+          memory: "1024"
+          network: "mgmt"
+          ip_address: "10.5.0.24"

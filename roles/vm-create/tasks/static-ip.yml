@@ -1,0 +1,63 @@
+---
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/sect-managing_guest_virtual_machines_with_virsh-managing_virtual_networks#static-ip-address
+
+- name: stop the VM
+  virt:
+    name: "{{ vm.name }}"
+    command: destroy
+
+- name: "write tmp network settings for {{ vm.name }}"
+  template:
+    src: ifcfg-eth0.static
+    dest: "/tmp/ifcfg-eth0-{{ vm.name }}"
+
+- name: sysprep image
+  command: >
+    virt-sysprep -d {{ vm.name }} --hostname {{ vm.name }}  --upload /tmp/ifcfg-eth0-{{ vm.name }}:/etc/sysconfig/network-scripts/ifcfg-eth0 --operations defaults,-user-account,-ssh-userdir,-ssh-hostkeys
+
+- name: get mac-address of VM
+  shell: "virsh domiflist {{ vm.name }} | awk '{ print $5 }' | tail -n +3 | head -n -1"
+  register: vm_mac
+  until: "vm_mac.stdout != ''"
+
+- set_fact:
+    mac_address: "{{ vm_mac.stdout }}"
+
+- debug:
+    msg: "{{ mac_address }}"
+
+# should be safe to remove _any_ existing host DHCP record
+# since we would have a conflict on hostnames before this 
+- name: get xml line of ip if it exist
+  shell: "virsh net-dumpxml {{ vm.network }} | grep {{ vm.ip_address }}"
+  register: netxml
+  failed_when: false
+  ignore_errors: true
+
+- name: delete existing record
+  command: 'virsh net-update --network mgmt --command delete --section ip-dhcp-host --xml "{{ netxml.stdout | trim }}" --config --live'
+  when: 'netxml.stdout != ""'
+
+- name: add static ip address
+  command: "virsh net-update {{ vm.network }} add ip-dhcp-host \"<host mac='{{ mac_address }}' name='{{ vm.name }}' ip='{{ vm.ip_address }}'/>\" --live --config"
+
+- name: start the VM
+  virt:
+    name: "{{ vm.name }}"
+    command: start
+
+- name: ensure VM is present in inventory
+  lineinfile: 
+    path: "{{ inventory_dir }}/connections"
+    line: "{{ vm.name }} ansible_host='{{ vm.ip_address }}'"
+  delegate_to: localhost
+  become: false
+
+- name: add VM to in-memory inventory
+  add_host:
+    hostname: "{{ vm.name }}"
+    ansible_host: "{{ vm.ip_address }}"
+    groups:
+    - vms
+
+

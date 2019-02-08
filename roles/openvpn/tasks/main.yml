@@ -21,6 +21,7 @@
     recurse: true
     state: directory
   delegate_to: localhost
+  become: false
 
 - name: configure openvpn server
   template:
@@ -33,6 +34,7 @@
     dest: ~/openvpnconfigs/{{ inventory_hostname }}/{{ inventory_hostname }}.conf
     src: client.conf.j2
   delegate_to: localhost
+  become: false
 
 - name: fetch static key
   fetch:

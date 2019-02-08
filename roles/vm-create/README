@@ -1,0 +1,19 @@
+Labhost VM-create
+=================
+
+Role to create VM's.  
+Tightly coupled with [`libvirt_networks`](/roles/libvirt_network/) and [`vm-template`](/roles/vm-template).  
+It relies on the `libvirt_networks:` for network placement and `vm-teplate` to provide a template image to _clone_ from.
+
+
+Usage
+=====
+
+Once vm-template has been run and a template is available you can use this role to create copies.
+```
+- hosts: labhost
+  roles:
+  - vm-template
+  - vm-create
+```
+

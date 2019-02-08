@@ -1,0 +1,11 @@
+- hosts: labhost
+  become: true
+  roles:
+  - subman
+  - role: reposync
+    vars:
+      phase: setup
+  - role: reposync
+    vars:
+      phase: final
+  - vm-template

@@ -1,0 +1,57 @@
+---
+# 
+# vm:
+#   name: vm-name
+#   template: <default(template_name)>
+#   network: mgmt
+#   memory: <default 2048>
+#   cpu: default 1
+#   disk: <default 20G>
+#   extra_disks: <optional>
+#   - name: <default( vm-name-diskN)
+#     size: <default(20)>
+#   - name: <default( vm-name-diskN)
+#     size: <default(20)>
+
+- name: precheck
+  include_tasks: precheck.yml
+
+
+- name: clone template image
+  command: >
+    qemu-img create -f qcow2 
+    -b /var/lib/libvirt/images/templates/template-{{ vm.template | default(template_name) | default('7.6') }}.qcow2 
+    /var/lib/libvirt/images/{{ vm.name }}.qcow2 
+    {{ vm.disk | default('20G') }} 
+
+
+- name: "create VM {{ vm.name }}"
+  command: > 
+    virt-install --name {{ vm.name }}
+    --vcpu {{ vm.cpu | default('1') }} 
+    --memory {{ vm.memory | default(2048) }} 
+    --disk /var/lib/libvirt/images/{{ vm.name }}.qcow2,bus=virtio 
+    --import 
+    --graphics spice,listen=127.0.0.1 
+    --noautoconsole
+    --network network={{ vm.network }},model=virtio
+    --os-variant linux 
+    --os-type rhel7
+
+- name: create extra disks
+  include_tasks: create-extra-disk.yml
+  loop: "{{ vm.extra_disks }}"
+  loop_control:
+    loop_var: disk
+  when: vm.extra_disks is defined | default(false)
+
+- name: "set static ip for {{ vm.name }}"
+  include_tasks: static-ip.yml
+  when: vm.ip_address is defined | default(false)
+
+  #- name: start up VM
+
+- name: "no static ip set"
+  include_tasks: non-static-ip.yml
+  when: vm.ip_address is not defined | default(true)
+

@@ -3,9 +3,9 @@
   <forward mode='open'/>
   <bridge name='virbr-{{ network.name }}' stp='on' delay='0'/>
   <domain name='open'/>
-  <ip address="{{ network.interface_address }}" netmask="{{ netmask | default('255.255.255.0') }}">
+  <ip address="{{ network.subnet | ipaddr('1') | ipaddr('address') }}" netmask="{{ network.subnet | ipaddr('netmask') }}">
     <dhcp>
-      <range start='{{ network.dhcp_range_start }}' end='{{ network.dhcp_range_stop }}'/>
+      <range start='{{ network.subnet | ipaddr("2") | ipaddr('address') }}' end='{{ network.subnet | ipaddr("net") | ipaddr("-2") | ipaddr('address') }}'/>
     </dhcp>
   </ip>
 </network>

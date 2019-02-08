@@ -1,0 +1,23 @@
+# This sub-part of the inventory is where we dynamically add connection information for the VM's we create.
+# During VM provisioning we do a lineinfile: to ensure IP information is there.
+#
+# When doing an end-to-end play we rely on the add_host: functionality 
+# to be able to connect to the VM after the bootstrap.
+#
+# But add_host adds the host to the temporary in-memory inventory.
+# After the play is over, the host information is lost.
+# Therefor we add them here for future connections.
+# 
+# _This file should be pretty handsoff and managed by the vm-create and vm-destroy roles._
+#
+# Statically ip's are given in the 
+# vm:
+#   network: mgmt
+#   ip_address: 10.5.0.15
+#
+# But the variable we need to define is the `ansible_host:`.
+#
+[vms:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q labhost" -o ServerAliveInterval=300 -o ServerAliveCountMax=2 -o StrictHostKeyChecking=no -o "UserKnownHostsFile /dev/null"'
+
+[vms]

@@ -2,7 +2,8 @@
 auth --enableshadow --passalgo=sha512
 # Use network installation
 url --url="http://172.199.199.1/rhel-7-server-rpms/"
-# Use graphical install
+# Use text install
+text
 
 # Run the Setup Agent on first boot
 firstboot --disable
@@ -55,5 +56,20 @@ chmod 0600 /home/{{ user.name }}/.ssh/authorized_keys
 chmod 0700 /home/{{ user.name }}/.ssh/
 echo "{{ user.name }} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/users 
 {% endfor %}
-%end
 
+# https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/virtualization_deployment_and_administration_guide/cloning_virtual_machines
+
+# generic network setting
+# eth0 is guaranteed by virtio driver
+cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth0
+DEVICE=eth0
+NAME=eth0
+BOOTPROTO=dhcp
+ONBOOT=yes
+
+EOF
+
+rm -f /etc/udev/rules.d/70-persistent-net.rules
+
+rm -rf /etc/ssh/ssh_host_*
+%end
