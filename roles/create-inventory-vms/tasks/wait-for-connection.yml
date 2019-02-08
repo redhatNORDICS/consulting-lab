@@ -1,5 +1,3 @@
-- debug:
-    msg: "{{ hostvars[host] }}"
 - set_fact:
     ansible_host: "{{ hostvars[host]['ansible_host'] }}"
 
