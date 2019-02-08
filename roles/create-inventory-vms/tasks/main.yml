@@ -3,17 +3,17 @@
     msg: "{{ groups['vms'] }}"
 
 - name: create VM 
-  debug:
-    msg: "{{ hostvars[host] }}"
-  loop: "{{ groups['vms'] }}"
-  loop_control:
-    loop_var: host
-
-- name: create VM 
   include_role:
     name: vm-create
   vars:
     vm: "{{ hostvars[host] }}"
+  loop: "{{ groups['vms'] }}"
+  loop_control:
+    loop_var: host
+
+
+- name: "Wait for VMs to come online"
+  include_tasks: wait-for-connection.yml
   loop: "{{ groups['vms'] }}"
   loop_control:
     loop_var: host

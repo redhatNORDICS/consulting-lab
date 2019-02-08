@@ -3,3 +3,8 @@
   roles:
   - create-inventory-vms
 
+- hosts: vms
+  become: true
+  roles:
+  - users
+

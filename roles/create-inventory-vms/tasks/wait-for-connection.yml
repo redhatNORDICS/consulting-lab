@@ -1,0 +1,26 @@
+- debug:
+    msg: "{{ hostvars[host] }}"
+- set_fact:
+    ansible_host: "{{ hostvars[host]['ansible_host'] }}"
+
+
+# https://github.com/ansible/ansible/pull/23775
+# 
+#- name: "wait for {{ host }} to come online connection"
+#  ping:
+#  vars:
+#    ansible_ssh_common_args: "{{ hostvars[host]['ansible_ssh_common_args'] }}"
+#    retries: 10
+#    sleep: 5
+#    delay: 10
+- name: "wait for {{ host }} to come online connection"
+  wait_for_connection: 
+    delay: "10"
+    sleep: "10"
+    timeout: "120"
+    connect_timeout: 10 
+  vars:
+    ansible_ssh_common_args: "{{ hostvars[host]['ansible_ssh_common_args'] }}"
+
+- set_fact:
+    ansible_host: labhost
