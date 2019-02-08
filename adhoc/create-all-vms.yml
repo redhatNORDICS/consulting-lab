@@ -7,4 +7,5 @@
   become: true
   roles:
   - users
+  - motd
 
