@@ -16,6 +16,8 @@
 
 - name: check repos
   shell: yum repolist | wc -l
+  args:
+    warn: false
   changed_when: false
   register: repolist
 
