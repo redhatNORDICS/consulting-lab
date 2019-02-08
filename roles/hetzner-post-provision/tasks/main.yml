@@ -8,35 +8,7 @@
   yum:
     name: "*"
     state: latest
-
-- name: install packages
-  yum:
-    name: "{{ packages }}"
-  vars:
-    packages:
-    - "@virtualization-platform"
-    - "@^virtualization-host-environment"
-    - iptables-services
-    - virt-install
-    - libguestfs-tools.noarch
-    - libguestfs-xfs
-    - git
-    - python-lxml
-    - epel-release
-#     - cockpit
-#     - cockpit-machines
-
-# - name: start and enable cockpit
-#   service:
-#     name: cockpit.socket
-#     state: started
-#     enabled: true
-
-- name: configure nested virtualization
-  copy:
-    src: kvm-nested.conf
-    dest: /etc/modprobe.d/kvm-nested.conf
-  register: nested_kvm
+  notify: reboot
 
 - name: make sure selinux is enabled
   lineinfile:
@@ -44,14 +16,12 @@
     regexp: "^SELINUX="
     line: "SELINUX=enforcing"
   register: selinux_set_to_enforcing
+  notify: reboot
 
 - name: set autorelabel for next reboot
   file:
     dest: /.autorelabel
     state: touch
   when: selinux_set_to_enforcing.changed
+  notify: reboot
 
-- name: reboot to apply selinux changes
-  import_role:
-    name: reboot
-  when: selinux_set_to_enforcing.changed
