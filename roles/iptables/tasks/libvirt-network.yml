@@ -34,7 +34,6 @@
     jump: ACCEPT
     comment: "Allow inter-LAN traffic for {{ network.name }}"
 
-
 - name: Create FORWARD rule to chain {{ network.name }}
   iptables:
     action: insert

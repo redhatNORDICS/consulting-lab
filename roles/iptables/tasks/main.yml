@@ -27,12 +27,12 @@
   when: "'open_network' in network.type"
 
 #Allow "nat_network_dhcp" to access anything
-- name: allow nat_network_dhcp networks to access anything
-  include_tasks: allow-nat_network_dhcp.yml
-  loop: "{{ libvirt_networks }}"
-  loop_control:
-    loop_var: network
-  when: "'nat_network_dhcp' in network.type"
+# - name: allow nat_network_dhcp networks to access anything
+#   include_tasks: allow-nat_network_dhcp.yml
+#   loop: "{{ libvirt_networks }}"
+#   loop_control:
+#     loop_var: network
+#   when: "'nat_network_dhcp' in network.type"
 
 
 # SAVE RULES
