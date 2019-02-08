@@ -1,4 +1,3 @@
-# tasks file for labhost
 - name: install packages
   yum:
     name: "{{ packages }}"
@@ -18,10 +17,17 @@
     name: epel-release
   when: ansible_distribution == 'CentOS'
 
-- name: disable firewalld
+- name: configure nested virtualization
+  copy:
+    src: kvm-nested.conf
+    dest: /etc/modprobe.d/kvm-nested.conf
+  notify: reboot
+
+- name: remove firewalld
   yum:
     name: firewalld
     state: absent
+  notify: restart libvirtd
 
 - name: enable services
   service:
@@ -38,40 +44,44 @@
     dest: /root/virt-install-wrapper
   ignore_errors: true
 
-- name: allow ssh
-  iptables:
-    action: insert
-    chain: INPUT
-    protocol: tcp
-    destination_port: 22
-    ctstate: NEW
-    comment: allow incoming SSH
-    jump: ACCEPT
-  register: iptables_ssh
+- name: force all notified handlers to run now
+  meta: flush_handlers
 
-- name: allow lo
-  iptables:
-    action: insert
-    chain: INPUT
-    in_interface: lo
-    jump: ACCEPT
-  register: iptables_lo
 
-- name: allow response traffic
-  iptables:
-    chain: INPUT
-    ctstate: ESTABLISHED,RELATED
-    comment: allow response traffic
-    jump: ACCEPT
-  register: iptables_response
+# - name: allow ssh
+#   iptables:
+#     action: insert
+#     chain: INPUT
+#     protocol: tcp
+#     destination_port: 22
+#     ctstate: NEW
+#     comment: allow incoming SSH
+#     jump: ACCEPT
+#   register: iptables_ssh
 
-- name: drop stuff
-  iptables:
-    chain: INPUT
-    reject_with: icmp-port-unreachable
-    ip_version: ipv4
-  register: iptables_reject
+# - name: allow lo
+#   iptables:
+#     action: insert
+#     chain: INPUT
+#     in_interface: lo
+#     jump: ACCEPT
+#   register: iptables_lo
 
-- name: save iptables rules
-  shell: iptables-save > /etc/sysconfig/iptables
-  when: iptables_ssh.changed or iptables_response.changed or iptables_reject.changed or iptables_lo.changed
+# - name: allow response traffic
+#   iptables:
+#     chain: INPUT
+#     ctstate: ESTABLISHED,RELATED
+#     comment: allow response traffic
+#     jump: ACCEPT
+#   register: iptables_response
+
+# - name: drop stuff
+#   iptables:
+#     chain: INPUT
+#     reject_with: icmp-port-unreachable
+#     ip_version: ipv4
+#   register: iptables_reject
+
+# - name: save iptables rules
+#   shell: iptables-save > /etc/sysconfig/iptables
+#   when: iptables_ssh.changed or iptables_response.changed or iptables_reject.changed or iptables_lo.changed
