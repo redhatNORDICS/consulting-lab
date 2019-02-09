@@ -1,3 +1,5 @@
+# This repos has moved to https://gitlab.com/redhatnordics/consulting-lab
+
 # consulting-lab
 
 A repository containing collection of resources used by consultants in their lab environments.  
