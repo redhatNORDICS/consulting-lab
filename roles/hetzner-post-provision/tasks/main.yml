@@ -25,3 +25,11 @@
   when: selinux_set_to_enforcing.changed
   notify: reboot
 
+- name: Make sure libselinux-python is installed
+  yum:
+    name: "libselinux-python"
+    state: latest
+
+- name: Make sure reboot handler is called now
+  meta: flush_handlers
+

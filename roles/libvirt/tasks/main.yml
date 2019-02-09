@@ -17,11 +17,17 @@
     name: epel-release
   when: ansible_distribution == 'CentOS'
 
-- name: configure nested virtualization
+- name: configure permanent nested virtualization
   copy:
     src: kvm-nested.conf
     dest: /etc/modprobe.d/kvm-nested.conf
-  notify: reboot
+
+- name: enable nested virtualization
+  modprobe:
+    name: kvm_intel
+    state: present
+    params: 'nested=1'
+  notify: restart libvirtd
 
 - name: remove firewalld
   yum:
