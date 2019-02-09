@@ -2,6 +2,3 @@
   service:
     name: libvirtd
     state: restarted
-
-- name: reboot
-  reboot:
