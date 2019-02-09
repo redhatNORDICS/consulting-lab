@@ -32,3 +32,4 @@
 
 - name: Make sure reboot handler is called now
   meta: flush_handlers
+
