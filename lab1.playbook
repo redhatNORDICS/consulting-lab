@@ -1,0 +1,68 @@
+# Lab example 1 
+# 2019-02-08
+#
+# This example playbook has been tested with https://github.com/redhatNORDICS/consulting-lab/pull/38#issuecomment-461851756
+# A complete run like this takes around 1h, so it is a good idea to use `nohup &` or a terminal multiplexer like screen or tmux.
+#
+# It will turn a Hetzner host running the rescue boot to a labsetup with virtual networks
+# and ready to spin up VM's in matter of seconds. 
+# 
+# The process:
+# Once the hetzner installer is finished with the CentOS installation
+# it will start syncing down the latest RHEL 7Server repo.
+#
+# While the sync runs it will proceed to configure libvirt with networks,
+# OpenVPN and knockd.
+# 
+# The process is blocked until the reposync is complete. Once it has completed
+# the VM template will be created. This will serve as a base for all VM's that we create.
+#
+# With the template in place, it will then create all VM's defined in the [vms] group in the inventory.
+# The VM's are added to the in-memory inventory for further configuration and alsot to the static inventory/connections file.
+#
+# Next play is against the new VM's where the example just applies the motd role.
+#
+# Usage:
+# $ nohup ansible-playbook -i inventory/ lab1.playbook &
+
+
+# From rescue mode
+- hosts: labhost
+  user: root
+  roles:
+  - hetzner-provision
+  - role: mdadm-sync
+    vars: 
+      stop_sync: true 
+  - users
+
+# centos installed
+- hosts: labhost
+  become: true
+  gather_facts: true
+  roles:
+  - hetzner-post-provision
+  - subman
+  - role: reposync
+    vars:
+      phase: setup
+  - openvpn
+  - libvirt
+  - libvirt_network 
+  - iptables
+  - knockd
+  - role: reposync
+    vars:
+      phase: final
+  - vm-template
+  - create-inventory-vms
+  - role: mdadm-sync
+    vars: 
+      start_sync: true 
+
+# configure vm's
+- hosts: vms
+  become: true
+  roles: 
+  - motd
+  
